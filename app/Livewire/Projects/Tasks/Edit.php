@@ -43,13 +43,13 @@ class Edit extends Component
         ];
     }
 
-    public function save(): void
+    public function save()
     {
         $data = $this->validate();
         $this->task->update($data);
 
         session()->flash('toast', 'Tarea actualizada.');
-        $this->redirectRoute('projects.tasks.index', $this->project, navigate: true);
+        return redirect()->route('projects.tasks.index', ['project' => $this->project->getRouteKey()]);
     }
 
     #[Layout('layouts.app')]

@@ -33,13 +33,13 @@ class Create extends Component
         ];
     }
 
-    public function save(): void
+    public function save()
     {
         $data = $this->validate();
         Task::create(array_merge($data, ['project_id' => $this->project->id]));
 
         session()->flash('toast', 'Tarea creada.');
-        $this->redirectRoute('projects.tasks.index', $this->project, navigate: true);
+        return redirect()->route('projects.tasks.index', ['project' => $this->project->getRouteKey()]);
     }
 
     #[Layout('layouts.app')]

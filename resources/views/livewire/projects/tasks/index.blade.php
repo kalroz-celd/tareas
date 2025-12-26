@@ -1,4 +1,12 @@
-<div class="space-y-4">
+<div class="space-y-4" x-data="{
+        showDeleted: false,
+        init() {
+            window.addEventListener('task-deleted', () => {
+                this.showDeleted = true;
+                setTimeout(() => this.showDeleted = false, 1000);
+            });
+        }
+    }">
     {{-- Header --}}
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -24,12 +32,20 @@
         </a>
     </div>
 
-    {{-- Toast --}}
-    @if (session('toast'))
-        <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-900/50 dark:bg-emerald-900/20 dark:text-emerald-200 transition-colors duration-300">
-            {{ session('toast') }}
+    {{-- Deleted modal --}}
+    <div
+        x-show="showDeleted"
+        x-transition.opacity.duration.150ms
+        class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm">
+        <div class="flex items-center gap-3 rounded-2xl bg-white px-5 py-4 text-sm font-semibold text-slate-800 shadow-xl ring-1 ring-slate-200 dark:bg-slate-900 dark:text-white dark:ring-slate-700">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-300">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7" />
+                </svg>
+            </div>
+            <span>La tarea ha sido eliminada.</span>
         </div>
-    @endif
+    </div>
 
     {{-- Filters --}}
     <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 transition-colors duration-300">
@@ -109,7 +125,6 @@
                                     </a>
 
                                     <button
-                                        onclick="confirm('¿Eliminar esta tarea?') || event.stopImmediatePropagation()"
                                         wire:click="delete({{ $t->id }})"
                                         class="rounded-xl bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-500 transition-colors">
                                         Eliminar
@@ -145,7 +160,6 @@
                         </a>
 
                         <button
-                            onclick="confirm('¿Eliminar esta tarea?') || event.stopImmediatePropagation()"
                             wire:click="delete({{ $t->id }})"
                             class="rounded-xl bg-rose-600 px-3 py-2 text-xs font-semibold text-white hover:bg-rose-500 transition-colors">
                             Eliminar

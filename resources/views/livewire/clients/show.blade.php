@@ -117,6 +117,115 @@
         </div>
     </div>
 
+    {{-- Modal pago (solo Livewire) --}}
+    @if($showPaymentModal)
+        <div
+            class="fixed inset-0 z-50 flex items-center justify-center"
+            wire:keydown.escape.window="$set('showPaymentModal', false)"
+        >
+            <div
+                class="absolute inset-0 bg-black/40"
+                wire:click="$set('showPaymentModal', false)"
+            ></div>
+
+            <div
+                class="relative w-full max-w-md rounded-2xl border border-slate-200 bg-white p-5 shadow-xl dark:border-slate-800 dark:bg-slate-900"
+                wire:click.stop
+            >
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-900 dark:text-slate-100">Actualizar pago</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">
+                            Edita fecha de vencimiento, monto y estado del pago del proyecto.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-950/50"
+                        wire:click="$set('showPaymentModal', false)"
+                    >✕</button>
+                </div>
+
+                <div class="mt-4 space-y-3">
+                    <div>
+                        <label class="text-xs font-semibold text-slate-600 dark:text-slate-400">Vencimiento</label>
+                        <input
+                            type="date"
+                            wire:model.defer="payment_due_date"
+                            class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+                        />
+                        @error('payment_due_date') <div class="mt-1 text-xs text-rose-600">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="col-span-2">
+                            <label class="text-xs font-semibold text-slate-600 dark:text-slate-400">Monto</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                wire:model.defer="amount"
+                                class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+                            />
+                            @error('amount') <div class="mt-1 text-xs text-rose-600">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div>
+                            <label class="text-xs font-semibold text-slate-600 dark:text-slate-400">Moneda</label>
+                            <input
+                                type="text"
+                                maxlength="3"
+                                wire:model.defer="currency"
+                                class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm uppercase tracking-wide dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+                            />
+                            @error('currency') <div class="mt-1 text-xs text-rose-600">{{ $message }}</div> @enderror
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-slate-600 dark:text-slate-400">Estado del pago</label>
+                        <select
+                            wire:model.defer="payment_status"
+                            class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+                        >
+                            <option value="pending">Pendiente</option>
+                            <option value="paid">Pagado</option>
+                            <option value="overdue">Atrasado</option>
+                        </select>
+                        @error('payment_status') <div class="mt-1 text-xs text-rose-600">{{ $message }}</div> @enderror
+                    </div>
+                </div>
+
+                <div class="mt-5 flex flex-wrap justify-end gap-2">
+                    <button
+                        type="button"
+                        wire:click="clearPayment"
+                        class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 hover:bg-amber-100 dark:border-amber-900/40 dark:bg-amber-900/30 dark:text-amber-50"
+                    >
+                        Limpiar pago
+                    </button>
+
+                    <button
+                        type="button"
+                        wire:click="$set('showPaymentModal', false)"
+                        class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-950/40"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="button"
+                        wire:click="savePayment"
+                        class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+                    >
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+
     {{-- Modal asociar proyecto (solo Livewire) --}}
     @if($showAttachModal)
         <div

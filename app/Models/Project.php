@@ -15,6 +15,12 @@ class Project extends Model
         'start_date',
         'due_date',
         'is_archived',
+        'client_id',
+        'payment_due_date',
+        'amount',
+        'currency',
+        'payment_status',
+        'paid_at',
     ];
 
     protected $casts = [

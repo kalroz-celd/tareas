@@ -1,7 +1,4 @@
 <div class="space-y-4">
-    <span class="hidden" x-data
-        x-on:close-all-modals.window="$wire.set('showPaymentModal', false);$wire.set('showAttachModal', false);">
-    </span>
     <div class="flex items-start justify-between gap-4">
         <div>
             <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">

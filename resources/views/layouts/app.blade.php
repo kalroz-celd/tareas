@@ -53,7 +53,7 @@
 
     <script>
         document.addEventListener('livewire:navigated', () => {
-            window.dispatchEvent(new CustomEvent('close-all-modals'));
+            Livewire.dispatch('close-all-modals');
         });
     </script>
 </body>

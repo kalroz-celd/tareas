@@ -4,6 +4,7 @@ namespace App\Livewire\Clients;
 
 use App\Models\Client;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -81,6 +82,12 @@ class Index extends Component
     {
         Client::query()->whereKey($id)->delete();
         session()->flash('status', 'Cliente eliminado.');
+    }
+
+    #[On('close-all-modals')]
+    public function closeModals(): void
+    {
+        $this->showForm = false;
     }
 
     private function resetForm(): void

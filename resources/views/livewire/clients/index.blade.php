@@ -1,7 +1,4 @@
 <div class="space-y-4">
-    <span class="hidden" x-data
-        x-on:close-all-modals.window="$wire.set('showForm', false)">
-    </span>
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">

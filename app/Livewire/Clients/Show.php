@@ -5,6 +5,7 @@ namespace App\Livewire\Clients;
 use App\Models\Client;
 use App\Models\Project;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 #[Layout('layouts.app')]
@@ -125,6 +126,13 @@ class Show extends Component
         $this->reset('attachProjectId');
 
         session()->flash('status_client', 'Proyecto asociado al cliente.');
+    }
+
+    #[On('close-all-modals')]
+    public function closeModals(): void
+    {
+        $this->showPaymentModal = false;
+        $this->showAttachModal = false;
     }
 
     public function render()

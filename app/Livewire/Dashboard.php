@@ -41,7 +41,7 @@ class Dashboard extends Component
             ->count();
 
         $activeProjects = Project::query()
-            ->where('status', 'active')
+            ->whereNotIn('status', ['completed', 'cancelled'])
             ->where('is_archived', false)
             ->count();
 

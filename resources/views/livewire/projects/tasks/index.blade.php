@@ -8,7 +8,14 @@
     },
     proceedDeletion() {
         if (!this.confirmTaskId) return;
-        this.$wire.delete(this.confirmTaskId);
+                const rootEl = this.$root?.closest('[wire\\:id]');
+        const livewire = this.$wire
+            ?? rootEl?.__livewire
+            ?? window.Livewire?.find(rootEl?.getAttribute('wire:id'));
+
+        if (!livewire) return;
+
+        livewire.call('deleteTask', this.confirmTaskId);
         this.showConfirm = false;
     },
     cancelDeletion() {
@@ -187,6 +194,8 @@
                                     </a>
 
                                     <button
+                                        type="button"
+                                        @click="confirmDeletion({{ $t->id }})"
                                         class="rounded-xl bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-500 transition-colors">
                                         Eliminar
                                     </button>
@@ -221,6 +230,8 @@
                         </a>
 
                         <button
+                            type="button"
+                            @click="confirmDeletion({{ $t->id }})"
                             class="rounded-xl bg-rose-600 px-3 py-2 text-xs font-semibold text-white hover:bg-rose-500 transition-colors">
                             Eliminar
                         </button>

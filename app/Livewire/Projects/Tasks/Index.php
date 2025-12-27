@@ -45,7 +45,7 @@ class Index extends Component
     public function delete(int $id): void
     {
         $this->project->tasks()->whereKey($id)->delete();
-        session()->flash('toast', 'Tarea eliminada.');
+        $this->dispatch('task-deleted');
         $this->resetPage();
     }
 

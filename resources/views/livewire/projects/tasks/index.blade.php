@@ -1,35 +1,4 @@
-<div class="space-y-4" x-data="{
-    showConfirm: false,
-    confirmTaskId: null,
-    showDeleted: false,
-    confirmDeletion(id) {
-        this.confirmTaskId = id;
-        this.showConfirm = true;
-    },
-    proceedDeletion() {
-        if (!this.confirmTaskId) return;
-                const rootEl = this.$root?.closest('[wire\\:id]');
-        const livewire = this.$wire
-            ?? rootEl?.__livewire
-            ?? window.Livewire?.find(rootEl?.getAttribute('wire:id'));
-
-        if (!livewire) return;
-
-        livewire.call('deleteTask', this.confirmTaskId);
-        this.showConfirm = false;
-    },
-    cancelDeletion() {
-        this.showConfirm = false;
-        this.confirmTaskId = null;
-    },
-    init() {
-        window.addEventListener('task-deleted', () => {
-            this.showDeleted = true;
-            this.confirmTaskId = null;
-            setTimeout(() => this.showDeleted = false, 1000);
-        });
-    }
-}">
+<div class="space-y-4">
     {{-- Header --}}
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -55,66 +24,12 @@
         </a>
     </div>
 
-    {{-- Confirm deletion modal --}}
-    <div
-        x-show="showConfirm"
-        x-transition.opacity.duration.150ms
-        class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm">
-        <div
-            x-show="showConfirm"
-            x-transition.scale.origin.center.duration.200ms
-            class="w-[360px] rounded-2xl bg-white px-8 py-7 text-center text-slate-800 shadow-2xl ring-1 ring-slate-200 dark:bg-slate-900 dark:text-white dark:ring-slate-700">
-            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 text-amber-500 dark:bg-amber-900/40 dark:text-amber-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.487 0l5.58 9.92c.75 1.334-.213 2.981-1.744 2.981H4.42c-1.53 0-2.493-1.647-1.743-2.98l5.58-9.92zM11 13a1 1 0 10-2 0 1 1 0 002 0zm-.293-6.707a1 1 0 00-1.414 1.414L9.586 10a1 1 0 001.414 0l.293-.293a1 1 0 10-1.414-1.414L10 8.586l-.293-.293z" clip-rule="evenodd" />
-                </svg>
-            </div>
-            <h2 class="mt-4 text-xl font-bold">¿Estás seguro?</h2>
-            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">No podrás revertir esta acción.</p>
-
-            <div class="mt-6 flex items-center justify-center gap-3">
-                <button
-                    type="button"
-                    @click="cancelDeletion"
-                    class="rounded-lg bg-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
-                    Cancelar
-                </button>
-                <button
-                    type="button"
-                    @click="proceedDeletion"
-                    class="rounded-lg bg-rose-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-rose-500">
-                    Sí, eliminar
-                </button>
-            </div>
+    {{-- Toast --}}
+    @if (session('toast'))
+        <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-900/50 dark:bg-emerald-900/20 dark:text-emerald-200 transition-colors duration-300">
+            {{ session('toast') }}
         </div>
-    </div>
-
-    {{-- Deleted modal --}}
-    <div
-        x-show="showDeleted"
-        x-transition.opacity.duration.150ms
-        class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm">
-        <div
-            x-show="showDeleted"
-            x-transition.scale.origin.center.duration.200ms
-            class="w-[360px] rounded-2xl bg-white px-8 py-7 text-center text-slate-800 shadow-2xl ring-1 ring-slate-200 dark:bg-slate-900 dark:text-white dark:ring-slate-700">
-            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-300">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-8 w-8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7" />
-                </svg>
-            </div>
-            <h2 class="mt-4 text-xl font-bold">¡Eliminada!</h2>
-            <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">La tarea se eliminó correctamente.</p>
-            <div class="mt-6">
-                <button
-                    type="button"
-                    @click="showDeleted = false"
-                    class="rounded-lg bg-indigo-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-indigo-600">
-                    Aceptar
-                </button>
-            </div>
-        </div>
-    </div>
+    @endif
 
     {{-- Filters --}}
     <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 transition-colors duration-300">
@@ -194,8 +109,8 @@
                                     </a>
 
                                     <button
-                                        type="button"
-                                        @click="confirmDeletion({{ $t->id }})"
+                                        onclick="confirm('¿Eliminar esta tarea?') || event.stopImmediatePropagation()"
+                                        wire:click="delete({{ $t->id }})"
                                         class="rounded-xl bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-500 transition-colors">
                                         Eliminar
                                     </button>
@@ -230,8 +145,8 @@
                         </a>
 
                         <button
-                            type="button"
-                            @click="confirmDeletion({{ $t->id }})"
+                            onclick="confirm('¿Eliminar esta tarea?') || event.stopImmediatePropagation()"
+                            wire:click="delete({{ $t->id }})"
                             class="rounded-xl bg-rose-600 px-3 py-2 text-xs font-semibold text-white hover:bg-rose-500 transition-colors">
                             Eliminar
                         </button>

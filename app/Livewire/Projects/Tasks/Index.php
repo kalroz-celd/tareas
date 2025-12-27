@@ -42,10 +42,10 @@ class Index extends Component
         $this->sortDir = 'asc';
     }
 
-    public function deleteTask(int $id): void
+    public function delete(int $id): void
     {
         $this->project->tasks()->whereKey($id)->delete();
-        $this->dispatch('task-deleted');
+        session()->flash('toast', 'Tarea eliminada.');
         $this->resetPage();
     }
 

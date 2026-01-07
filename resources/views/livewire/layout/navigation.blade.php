@@ -119,7 +119,7 @@
                class="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold
                       text-slate-900 hover:bg-slate-100 dark:text-slate-100 dark:hover:bg-slate-900">
                 <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
-                Dashboard
+                Panel de control
             </a>
 
             <a href="{{ route('projects.index') }}"
@@ -211,7 +211,7 @@
                            class="flex items-center gap-x-3 rounded-xl px-3 py-2 text-sm font-semibold
                                   bg-slate-100 text-slate-900 dark:bg-slate-900 dark:text-slate-100">
                             <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
-                            Dashboard
+                            Panel de control
                         </a>
                     </li>
 
@@ -271,7 +271,7 @@
 
                         <div x-show="userOpen" x-transition @click.outside="userOpen = false" class="mt-2 px-2">
                             <div class="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                                <div class="text-xs text-slate-500 dark:text-slate-400">Email</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400">Correo electrónico</div>
                                 <div class="text-sm font-semibold text-slate-900 dark:text-slate-100 break-all">
                                     {{ auth()->user()->email ?? '' }}
                                 </div>

@@ -128,11 +128,13 @@ new #[Layout('layouts.guest')] class extends Component
                 <form wire:submit="login" class="mt-2 space-y-5">
                     <!-- Email -->
                     <div>
-                        <x-input-label for="email" :value="__('Email')" />
+                        <x-input-label for="email" :value="__('Correo electrónico')" />
                         <x-text-input
                             wire:model="form.email"
                             id="email"
-                            class="block mt-1 w-full"
+                            class="block mt-1 w-full bg-white/80 text-slate-900 border-slate-300 shadow-sm
+                                focus:border-indigo-500 focus:ring-indigo-500 placeholder:text-slate-400
+                                dark:bg-white/80 dark:text-slate-900 dark:border-slate-300"
                             type="email"
                             name="email"
                             required
@@ -146,12 +148,12 @@ new #[Layout('layouts.guest')] class extends Component
                     <!-- Password -->
                     <div>
                         <div class="flex items-center justify-between">
-                            <x-input-label for="password" :value="__('Password')" />
+                            <x-input-label for="password" :value="__('Contraseña')" />
                             @if (Route::has('password.request'))
                                 <a class="text-sm font-medium text-indigo-600 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md"
                                    href="{{ route('password.request') }}"
                                    wire:navigate>
-                                    {{ __('Forgot?') }}
+                                    {{ __('¿Olvisdaste contraseña?') }}
                                 </a>
                             @endif
                         </div>
@@ -159,7 +161,9 @@ new #[Layout('layouts.guest')] class extends Component
                         <x-text-input
                             wire:model="form.password"
                             id="password"
-                            class="block mt-1 w-full"
+                            class="block mt-1 w-full bg-white/80 text-slate-900 border-slate-300 shadow-sm
+                                focus:border-indigo-500 focus:ring-indigo-500 placeholder:text-slate-400
+                                dark:bg-white/80 dark:text-slate-900 dark:border-slate-300"
                             type="password"
                             name="password"
                             required
@@ -179,7 +183,7 @@ new #[Layout('layouts.guest')] class extends Component
                                 class="rounded border-slate-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
                                 name="remember"
                             >
-                            <span class="text-sm text-slate-600">{{ __('Remember me') }}</span>
+                            <span class="text-sm text-slate-600">{{ __('Recordarme') }}</span>
                         </label>
 
                         <span class="text-xs text-slate-500">
@@ -189,7 +193,7 @@ new #[Layout('layouts.guest')] class extends Component
 
                     <div class="pt-2">
                         <x-primary-button class="w-full justify-center py-3 text-base font-semibold">
-                            {{ __('Log in') }}
+                            {{ __('Iniciar Sesión') }}
                         </x-primary-button>
                     </div>
 

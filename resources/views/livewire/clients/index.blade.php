@@ -164,7 +164,7 @@
 
                     <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                         <div>
-                            <label class="text-xs font-semibold text-slate-600 dark:text-slate-400">Email</label>
+                            <label class="text-xs font-semibold text-slate-600 dark:text-slate-400">Correo electrónico</label>
                             <input wire:model="email"
                                 class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm
                                         dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" />

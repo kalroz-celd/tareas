@@ -99,7 +99,7 @@
                             <td class="px-4 py-3">
                                 <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold
                                     bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200 transition-colors duration-300">
-                                    {{ $p->status }}
+                                    {{ $p->status_label }}
                                 </span>
                                 @if($p->is_archived)
                                     <span class="ml-2 inline-flex rounded-full px-2.5 py-1 text-xs font-semibold
@@ -108,7 +108,7 @@
                                     </span>
                                 @endif
                             </td>
-                            <td class="px-4 py-3">{{ $p->priority }}</td>
+                            <td class="px-4 py-3">{{ $p->priority_label }}</td>
                             <td class="px-4 py-3">{{ optional($p->due_date)->format('d/m/Y') ?? '—' }}</td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center justify-end gap-2">
@@ -158,7 +158,7 @@
                         <div>
                             <div class="font-extrabold text-slate-900 dark:text-white">{{ $p->name }}</div>
                             <div class="text-xs text-slate-500 dark:text-slate-400">
-                                Estado: {{ $p->status }} · Prioridad: {{ $p->priority }}
+                                Estado: {{ $p->status_label }} · Prioridad: {{ $p->priority_label }}
                             </div>
                         </div>
                         @if($p->is_archived)

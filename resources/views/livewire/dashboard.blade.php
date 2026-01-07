@@ -1,7 +1,7 @@
 <div wire:poll.10s="loadData">
     <div class="flex flex-col gap-1 mb-4">
         <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
-            Dashboard
+            Panel de control
         </h2>
         <p class="text-sm text-slate-600 dark:text-slate-400">
             Resumen rápido de tus proyectos y tareas.
@@ -55,8 +55,8 @@
                             <tr class="border-b border-slate-200/50 dark:border-slate-800/50 hover:bg-slate-50/70 dark:hover:bg-slate-900/40">
                                 <td class="p-4 font-semibold">{{ $t->title }}</td>
                                 <td class="p-4 text-slate-600 dark:text-slate-400">{{ $t->project?->name ?? '—' }}</td>
-                                <td class="p-4">{{ $t->priority }}</td>
-                                <td class="p-4">{{ $t->status }}</td>
+                                <td class="p-4">{{ $t->priority_label }}</td>
+                                <td class="p-4">{{ $t->status_label }}</td>
                                 <td class="p-4 text-slate-600 dark:text-slate-400">{{ $t->due_date ? $t->due_date->format('d/m/Y') : '—' }}</td>
                             </tr>
                         @empty
@@ -100,7 +100,7 @@
                         <div class="rounded-xl border border-slate-200 p-3 dark:border-slate-800">
                             <div class="flex items-center justify-between">
                                 <div class="font-semibold text-slate-900 dark:text-slate-100">{{ $p['name'] }}</div>
-                                <div class="text-xs text-slate-500 dark:text-slate-400">{{ $p['status'] }}</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400">{{ $p['status_label'] }}</div>
                             </div>
                             <div class="mt-2 h-2 rounded-full bg-slate-100 dark:bg-slate-900 overflow-hidden">
                                 <div class="h-full rounded-full bg-sky-500/80" style="width: {{ $p['pct'] }}%"></div>

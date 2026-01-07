@@ -89,7 +89,7 @@ class Dashboard extends Component
             return [
                 'id'     => $p->id,
                 'name'   => $p->name,
-                'status' => $p->status,
+                'status_label' => $p->status_label,
                 'pct'    => $pct,
                 'total'  => $total,
                 'done'   => $done,

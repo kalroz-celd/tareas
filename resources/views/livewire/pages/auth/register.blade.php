@@ -56,7 +56,7 @@ new #[Layout('layouts.guest')] class extends Component
                 <form wire:submit="register" class="mt-8 space-y-5">
                     <!-- Name -->
                     <div>
-                        <x-input-label for="name" :value="__('Name')" />
+                        <x-input-label for="name" :value="__('Nombre')" />
                         <x-text-input
                             wire:model="name"
                             id="name"
@@ -75,7 +75,7 @@ new #[Layout('layouts.guest')] class extends Component
 
                     <!-- Email -->
                     <div>
-                        <x-input-label class="text-slate-700" for="email" :value="__('Email')" />
+                        <x-input-label class="text-slate-700" for="email" :value="__('Correo electrónico')" />
                         <x-text-input
                             wire:model="email"
                             id="email"
@@ -93,7 +93,7 @@ new #[Layout('layouts.guest')] class extends Component
 
                     <!-- Password -->
                     <div>
-                        <x-input-label for="password" :value="__('Password')" />
+                        <x-input-label for="password" :value="__('Contraseña')" />
                         <x-text-input
                             wire:model="password"
                             id="password"
@@ -111,7 +111,7 @@ new #[Layout('layouts.guest')] class extends Component
 
                     <!-- Confirm Password -->
                     <div>
-                        <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+                        <x-input-label for="password_confirmation" :value="__('Confirmar contraseña')" />
                         <x-text-input
                             wire:model="password_confirmation"
                             id="password_confirmation"
@@ -130,7 +130,7 @@ new #[Layout('layouts.guest')] class extends Component
                     <!-- Actions -->
                     <div class="pt-2">
                         <x-primary-button class="w-full justify-center py-3 text-base font-semibold">
-                            {{ __('Register') }}
+                            {{ __('Registrarse') }}
                         </x-primary-button>
                     </div>
 

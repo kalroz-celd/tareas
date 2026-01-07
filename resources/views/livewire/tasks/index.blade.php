@@ -99,14 +99,14 @@
                             <td class="px-4 py-3">
                                 <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold
                                     bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200 transition-colors duration-300">
-                                    {{ $t->status }}
+                                    {{ $t->status_label }}
                                 </span>
                             </td>
 
                             <td class="px-4 py-3">
                                 <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold
                                     bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200 transition-colors duration-300">
-                                    {{ $t->priority }}
+                                    {{ $t->priority_label }}
                                 </span>
                             </td>
 
@@ -152,11 +152,11 @@
                         <div class="flex flex-col items-end gap-1">
                             <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold
                                 bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200 transition-colors duration-300">
-                                {{ $t->status }}
+                                {{ $t->status_label }}
                             </span>
                             <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold
                                 bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200 transition-colors duration-300">
-                                {{ $t->priority }}
+                                {{ $t->priority_label }}
                             </span>
                         </div>
                     </div>

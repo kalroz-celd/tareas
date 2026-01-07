@@ -67,7 +67,7 @@
                 </div>
 
                 <div class="mt-3 border-t border-slate-200 pt-3 dark:border-slate-800">
-                    <form method="POST" action="{{ __('Log Out') }}">
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button class="w-full rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200">
                             Cerrar sesión
@@ -276,7 +276,7 @@
                                     {{ auth()->user()->email ?? '' }}
                                 </div>
 
-                                <form class="mt-3" method="POST" action="{{ __('Log Out') }}">
+                                <form class="mt-3" method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button class="w-full rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200">
                                         Cerrar sesión

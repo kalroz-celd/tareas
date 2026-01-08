@@ -25,7 +25,7 @@
             </button>
 
             <a href="{{ route('dashboard') }}" class="font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
-                Task Admin
+                <img src="{{asset('logo.png')}}" width="100" alt="Constelaris">
             </a>
 
             <div class="flex items-center gap-2">
@@ -101,7 +101,7 @@
     >
         <div class="flex items-center justify-between">
             <a href="{{ route('dashboard') }}" class="font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
-                Task Admin
+                <img src="{{asset('logo.png')}}" alt="Constelaris">
             </a>
             <button
                 class="rounded-xl border border-slate-200 bg-white p-2 text-slate-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
@@ -181,11 +181,7 @@
         <div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-slate-200 bg-white px-4 py-6 dark:border-slate-800 dark:bg-slate-950">
             <div class="flex items-center justify-between">
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-                    <div class="h-10 w-10 rounded-2xl bg-gradient-to-br from-indigo-600 to-sky-500"></div>
-                    <div>
-                        <div class="text-sm font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Task Admin</div>
-                        <div class="text-xs text-slate-500 dark:text-slate-400">Gestión de tareas</div>
-                    </div>
+                    <img src="{{asset('logo.png')}}" alt="Constelaris">
                 </a>
 
                 <button

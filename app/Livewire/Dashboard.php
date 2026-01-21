@@ -90,6 +90,7 @@ class Dashboard extends Component
                 'id'     => $p->id,
                 'name'   => $p->name,
                 'status_label' => $p->status_label,
+                'status_badge_class' => $p->status_badge_class,
                 'pct'    => $pct,
                 'total'  => $total,
                 'done'   => $done,

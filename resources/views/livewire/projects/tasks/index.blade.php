@@ -93,12 +93,15 @@
                                 @endif
                             </td>
                             <td class="px-4 py-3">
-                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold
-                                    bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200 transition-colors duration-300">
+                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $t->status_badge_class }}">
                                     {{ $t->status_label }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3">{{ $t->priority_label }}</td>
+                            <td class="px-4 py-3">
+                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $t->priority_badge_classes }}">
+                                    {{ $t->priority_label }}
+                                </span>
+                            </td>
                             <td class="px-4 py-3">{{ optional($t->due_date)->format('d/m/Y') ?? '—' }}</td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center justify-end gap-2">
@@ -133,8 +136,15 @@
             @forelse($tasks as $t)
                 <div class="p-4 space-y-2">
                     <div class="font-extrabold text-slate-900 dark:text-white">{{ $t->title }}</div>
-                    <div class="text-xs text-slate-500 dark:text-slate-400">
-                        Estado: {{ $t->status_label }} · Prioridad: {{ $t->priority_label }} · Vence: {{ optional($t->due_date)->format('d/m/Y') ?? '—' }}
+                    <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                        <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $t->status_badge_class }}">
+                            {{ $t->status_label }}
+                        </span>
+                        · Prioridad:
+                        <span class="inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold align-middle transition-colors duration-300 {{ $t->priority_badge_classes }}">
+                            {{ $t->priority_label }}
+                        </span>
+                        · Vence: {{ optional($t->due_date)->format('d/m/Y') ?? '—' }}
                     </div>
 
                     <div class="flex flex-wrap gap-2">

@@ -29,11 +29,11 @@
 </head>
 
 <body class="font-sans antialiased bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
-    <div class="min-h-screen">
+    <div class="min-h-screen flex flex-col">
         <livewire:layout.navigation />
 
         {{-- Contenido principal --}}
-        <main class="lg:pl-72">
+        <main class="lg:pl-72 flex-1">
             {{-- Header opcional --}}
             @if (isset($header))
                 <header class="sticky top-0 z-30 border-b border-slate-200/70 bg-white/70 backdrop-blur dark:border-slate-800/70 dark:bg-slate-950/60">
@@ -47,6 +47,14 @@
                 {{ $slot }}
             </div>
         </main>
+        <footer class="lg:pl-72 border-t border-slate-200/70 bg-white/70 text-slate-600 dark:border-slate-800/70 dark:bg-slate-950/60 dark:text-slate-300">
+            <div class="px-4 sm:px-6 lg:px-8 py-4 text-sm">
+                Todos los derechos reservados &copy; {{ date('Y') }}
+                <a class="font-medium text-slate-700 underline-offset-4 hover:underline dark:text-slate-200" href="https://celd.cl" target="_blank">
+                    CELD
+                </a>
+            </div>
+        </footer>
     </div>
 
     @livewireScripts

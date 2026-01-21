@@ -97,8 +97,7 @@
                                 @endif
                             </td>
                             <td class="px-4 py-3">
-                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold
-                                    bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200 transition-colors duration-300">
+                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $p->status_badge_class }}">
                                     {{ $p->status_label }}
                                 </span>
                                 @if($p->is_archived)
@@ -108,7 +107,11 @@
                                     </span>
                                 @endif
                             </td>
-                            <td class="px-4 py-3">{{ $p->priority_label }}</td>
+                            <td class="px-4 py-3">
+                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $p->priority_badge_classes }}">
+                                    {{ $p->priority_label }}
+                                </span>
+                            </td>
                             <td class="px-4 py-3">{{ optional($p->due_date)->format('d/m/Y') ?? '—' }}</td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center justify-end gap-2">
@@ -157,8 +160,14 @@
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <div class="font-extrabold text-slate-900 dark:text-white">{{ $p->name }}</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400">
-                                Estado: {{ $p->status_label }} · Prioridad: {{ $p->priority_label }}
+                            <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $p->status_badge_class }}">
+                                    {{ $p->status_label }}
+                                </span>
+                                · Prioridad:
+                                <span class="inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold align-middle transition-colors duration-300 {{ $p->priority_badge_classes }}">
+                                    {{ $p->priority_label }}
+                                </span>
                             </div>
                         </div>
                         @if($p->is_archived)

@@ -77,6 +77,18 @@ class Project extends Model
             ?? 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200';
     }
 
+    public function getStatusBadgeStyleAttribute(): string
+    {
+        return match ($this->status) {
+            'planning' => 'background-color:#fef3c7;color:#92400e;',
+            'active' => 'background-color:#e0f2fe;color:#0369a1;',
+            'on_hold' => 'background-color:#fef9c3;color:#854d0e;',
+            'completed' => 'background-color:#d1fae5;color:#047857;',
+            'cancelled' => 'background-color:#ffe4e6;color:#be123c;',
+            default => 'background-color:#f1f5f9;color:#334155;',
+        };
+    }
+
     public function getPriorityLabelAttribute(): string
     {
         return self::PRIORITY_LABELS[$this->priority] ?? ucfirst((string) $this->priority);
@@ -90,6 +102,17 @@ class Project extends Model
             'high' => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200',
             'urgent' => 'bg-red-200 text-red-900 dark:bg-red-900/50 dark:text-red-100',
             default => 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200',
+        };
+    }
+    
+    public function getPriorityBadgeStyleAttribute(): string
+    {
+        return match ($this->priority) {
+            'low' => 'background-color:#fef3c7;color:#92400e;',
+            'medium' => 'background-color:#ffedd5;color:#9a3412;',
+            'high' => 'background-color:#fee2e2;color:#b91c1c;',
+            'urgent' => 'background-color:#fecaca;color:#991b1b;',
+            default => 'background-color:#f1f5f9;color:#334155;',
         };
     }
 }

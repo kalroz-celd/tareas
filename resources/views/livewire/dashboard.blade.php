@@ -56,12 +56,14 @@
                                 <td class="p-4 font-semibold">{{ $t->title }}</td>
                                 <td class="p-4 text-slate-600 dark:text-slate-400">{{ $t->project?->name ?? '—' }}</td>
                                 <td class="p-4">
-                                    <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $t->priority_badge_classes }}">
+                                    <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $t->priority_badge_classes }}"
+                                          style="{{ $t->priority_badge_style }}">
                                         {{ $t->priority_label }}
                                     </span>
                                 </td>
                                 <td class="p-4">
-                                    <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $t->status_badge_class }}">
+                                    <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $t->status_badge_class }}"
+                                          style="{{ $t->status_badge_style }}">
                                         {{ $t->status_label }}
                                     </span>
                                 </td>
@@ -109,7 +111,8 @@
                             <div class="flex items-center justify-between">
                                 <div class="font-semibold text-slate-900 dark:text-slate-100">{{ $p['name'] }}</div>
                                 <div class="text-xs text-slate-500 dark:text-slate-400">
-                                    <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $p['status_badge_class'] }}">
+                                    <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $p['status_badge_class'] }}"
+                                          style="{{ $p['status_badge_style'] }}">
                                         {{ $p['status_label'] }}
                                     </span>
                                 </div>

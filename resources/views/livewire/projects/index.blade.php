@@ -97,7 +97,8 @@
                                 @endif
                             </td>
                             <td class="px-4 py-3">
-                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $p->status_badge_class }}">
+                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $p->status_badge_class }}"
+                                      style="{{ $p->status_badge_style }}">
                                     {{ $p->status_label }}
                                 </span>
                                 @if($p->is_archived)
@@ -108,7 +109,8 @@
                                 @endif
                             </td>
                             <td class="px-4 py-3">
-                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $p->priority_badge_classes }}">
+                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $p->priority_badge_classes }}"
+                                      style="{{ $p->priority_badge_style }}">
                                     {{ $p->priority_label }}
                                 </span>
                             </td>
@@ -161,11 +163,13 @@
                         <div>
                             <div class="font-extrabold text-slate-900 dark:text-white">{{ $p->name }}</div>
                             <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $p->status_badge_class }}">
+                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $p->status_badge_class }}"
+                                      style="{{ $p->status_badge_style }}">
                                     {{ $p->status_label }}
                                 </span>
                                 · Prioridad:
-                                <span class="inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold align-middle transition-colors duration-300 {{ $p->priority_badge_classes }}">
+                                <span class="inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold align-middle transition-colors duration-300 {{ $p->priority_badge_classes }}"
+                                      style="{{ $p->priority_badge_style }}">
                                     {{ $p->priority_label }}
                                 </span>
                             </div>

@@ -10,11 +10,7 @@ use App\Livewire\Projects\Tasks\Create as ProjectTasksCreate;
 use App\Livewire\Projects\Tasks\Edit as ProjectTasksEdit;
 use App\Livewire\Clients\Index as ClientsIndex;
 use App\Livewire\Clients\Show as ClientsShow;
-
-use Illuminate\Support\Carbon;
-
-use App\Models\Project;
-use App\Models\Task;
+use App\Livewire\Gantt\Index as GanttIndex;
 
 //Route::view('/', 'welcome');
 
@@ -34,6 +30,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Link del menú "Tareas" => listado global con columna proyecto
     Route::get('/tasks', TasksAllIndex::class)->name('tasks.index');
+    Route::get('/gantt', GanttIndex::class)->name('gantt.index');
 
     Route::get('/clients', ClientsIndex::class)->name('clients.index');
     Route::get('/clients/{client}', ClientsShow::class)->name('clients.show');

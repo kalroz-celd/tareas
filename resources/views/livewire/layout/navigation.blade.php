@@ -116,29 +116,45 @@
 
         <nav class="mt-6 space-y-1">
             <a href="{{ route('dashboard') }}"
-               class="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold
-                      text-slate-900 hover:bg-slate-100 dark:text-slate-100 dark:hover:bg-slate-900">
+               @class([
+                   'flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold',
+                   'bg-slate-100 text-slate-900 shadow-sm dark:bg-slate-900 dark:text-slate-100' => request()->routeIs('dashboard'),
+                   'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900' => !request()->routeIs('dashboard'),
+               ])
+            >
                 <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
                 Panel de control
             </a>
 
             <a href="{{ route('projects.index') }}"
-               class="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold
-                      text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900">
+               @class([
+                   'flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold',
+                   'bg-slate-100 text-slate-900 shadow-sm dark:bg-slate-900 dark:text-slate-100' => request()->routeIs('projects.*'),
+                   'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900' => !request()->routeIs('projects.*'),
+               ])
+            >
                 <span class="h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-700"></span>
                 Proyectos
             </a>
 
             <a href="{{ route('tasks.index') }}"
-               class="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold
-                      text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900">
+               @class([
+                   'flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold',
+                   'bg-slate-100 text-slate-900 shadow-sm dark:bg-slate-900 dark:text-slate-100' => request()->routeIs('tasks.*'),
+                   'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900' => !request()->routeIs('tasks.*'),
+               ])
+            >
                 <span class="h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-700"></span>
                 Tareas
             </a>
 
             <a href="{{ route('clients.index') }}"
-               class="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold
-                      text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900">
+               @class([
+                   'flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold',
+                   'bg-slate-100 text-slate-900 shadow-sm dark:bg-slate-900 dark:text-slate-100' => request()->routeIs('clients.*'),
+                   'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900' => !request()->routeIs('clients.*'),
+               ])
+            >
                 <span class="h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-700"></span>
                 Clientes
             </a>
@@ -204,8 +220,12 @@
                 <ul role="list" class="flex flex-1 flex-col gap-y-1">
                     <li>
                         <a href="{{ route('dashboard') }}"
-                           class="flex items-center gap-x-3 rounded-xl px-3 py-2 text-sm font-semibold
-                                  bg-slate-100 text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+                           @class([
+                               'flex items-center gap-x-3 rounded-xl px-3 py-2 text-sm font-semibold',
+                               'bg-slate-100 text-slate-900 shadow-sm dark:bg-slate-900 dark:text-slate-100' => request()->routeIs('dashboard'),
+                               'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900' => !request()->routeIs('dashboard'),
+                           ])
+                        >
                             <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
                             Panel de control
                         </a>
@@ -213,8 +233,12 @@
 
                     <li>
                         <a href="{{ route('projects.index') }}"
-                           class="flex items-center gap-x-3 rounded-xl px-3 py-2 text-sm font-semibold
-                                  text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900">
+                           @class([
+                               'flex items-center gap-x-3 rounded-xl px-3 py-2 text-sm font-semibold',
+                               'bg-slate-100 text-slate-900 shadow-sm dark:bg-slate-900 dark:text-slate-100' => request()->routeIs('projects.*'),
+                               'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900' => !request()->routeIs('projects.*'),
+                           ])
+                        >
                             <span class="h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-700"></span>
                             Proyectos
                         </a>
@@ -222,8 +246,12 @@
 
                     <li>
                         <a href="{{ route('tasks.index') }}"
-                           class="flex items-center gap-x-3 rounded-xl px-3 py-2 text-sm font-semibold
-                                  text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900">
+                           @class([
+                               'flex items-center gap-x-3 rounded-xl px-3 py-2 text-sm font-semibold',
+                               'bg-slate-100 text-slate-900 shadow-sm dark:bg-slate-900 dark:text-slate-100' => request()->routeIs('tasks.*'),
+                               'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900' => !request()->routeIs('tasks.*'),
+                           ])
+                        >
                             <span class="h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-700"></span>
                             Tareas
                         </a>
@@ -231,8 +259,12 @@
 
                     <li>
                         <a href="{{ route('clients.index') }}"
-                            class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold
-                                    text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800">
+                            @class([
+                                'flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold',
+                                'bg-slate-100 text-slate-900 shadow-sm dark:bg-slate-900 dark:text-slate-100' => request()->routeIs('clients.*'),
+                                'text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800' => !request()->routeIs('clients.*'),
+                            ])
+                        >
                             <span>👤</span>
                             <span>Clientes</span>
                         </a>

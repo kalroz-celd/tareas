@@ -75,7 +75,8 @@
 
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                     @forelse($tasks as $t)
-                        <tr class="text-slate-900 dark:text-white">
+                        <tr class="text-slate-900 dark:text-white cursor-pointer"
+                            wire:click="openTaskSummary({{ $t->id }})">
                             <td class="px-4 py-3">
                                 <div class="font-semibold">{{ $t->title }}</div>
                                 @if($t->description)
@@ -97,13 +98,15 @@
                             </td>
 
                             <td class="px-4 py-3">
-                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $t->status_badge_class }}">
+                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $t->status_badge_class }}"
+                                      style="{{ $t->status_badge_style }}">
                                     {{ $t->status_label }}
                                 </span>
                             </td>
 
                             <td class="px-4 py-3">
-                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $t->priority_badge_classes }}">
+                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $t->priority_badge_classes }}"
+                                      style="{{ $t->priority_badge_style }}">
                                     {{ $t->priority_label }}
                                 </span>
                             </td>
@@ -116,7 +119,8 @@
                                 <div class="flex items-center justify-end gap-2">
                                     @if($t->project_id)
                                         <a href="{{ route('projects.tasks.index', $t->project_id) }}"
-                                           class="rounded-xl border border-indigo-200 px-3 py-1.5 text-xs font-semibold
+                                            x-on:click.stop
+                                            class="rounded-xl border border-indigo-200 px-3 py-1.5 text-xs font-semibold
                                                   text-indigo-700 hover:bg-indigo-50 dark:border-indigo-900/40 dark:text-indigo-200 dark:hover:bg-indigo-500/10 transition-colors duration-300">
                                             Ver proyecto →
                                         </a>
@@ -138,7 +142,8 @@
         {{-- Mobile cards --}}
         <div class="md:hidden divide-y divide-slate-100 dark:divide-slate-800">
             @forelse($tasks as $t)
-                <div class="p-4 space-y-2">
+                <div class="p-4 space-y-2 cursor-pointer"
+                     wire:click="openTaskSummary({{ $t->id }})">
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <div class="font-extrabold text-slate-900 dark:text-white">{{ $t->title }}</div>
@@ -148,11 +153,12 @@
                         </div>
 
                         <div class="flex flex-col items-end gap-1">
-                            <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $t->status_badge_class }}">
+                            <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $t->status_badge_class }}"
+                                  style="{{ $t->status_badge_style }}">
                                 {{ $t->status_label }}
                             </span>
                             <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold
-                                transition-colors duration-300 {{ $t->priority_badge_classes }}">
+                                transition-colors duration-300" style="{{ $t->priority_badge_style }}">
                                 {{ $t->priority_label }}
                             </span>
                         </div>
@@ -171,7 +177,8 @@
                     <div class="flex flex-wrap gap-2 pt-1">
                         @if($t->project_id)
                             <a href="{{ route('projects.tasks.index', $t->project_id) }}"
-                               class="rounded-xl border border-indigo-200 px-3 py-2 text-xs font-semibold
+                                x-on:click.stop
+                                class="rounded-xl border border-indigo-200 px-3 py-2 text-xs font-semibold
                                       text-indigo-700 hover:bg-indigo-50 dark:border-indigo-900/40 dark:text-indigo-200 dark:hover:bg-indigo-500/10 transition-colors duration-300">
                                 Ver en proyecto →
                             </a>
@@ -189,4 +196,51 @@
             {{ $tasks->links() }}
         </div>
     </div>
+    <x-modal name="task-summary" maxWidth="2xl">
+        <div class="p-6 space-y-4">
+            <div class="flex items-start justify-between gap-4">
+                <div class="space-y-1">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Resumen de tarea</p>
+                    <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">
+                        {{ $selectedTask['title'] ?? 'Tarea' }}
+                    </h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">
+                        Proyecto: <span class="font-semibold text-slate-700 dark:text-slate-200">{{ $selectedTask['project_name'] ?? '—' }}</span>
+                        @if(!empty($selectedTask['project_id']))
+                            <span class="text-xs text-slate-400">#{{ $selectedTask['project_id'] }}</span>
+                        @endif
+                    </p>
+                </div>
+                <button type="button"
+                        class="rounded-full p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                        x-on:click="$dispatch('close-modal', 'task-summary')">
+                    ✕
+                </button>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $selectedTask['status_badge_class'] ?? 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200' }}">
+                    {{ $selectedTask['status_label'] ?? '—' }}
+                </span>
+                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $selectedTask['priority_badge_classes'] ?? 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200' }}">
+                    {{ $selectedTask['priority_label'] ?? '—' }}
+                </span>
+                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                    Vence: {{ $selectedTask['due_date'] ?? '—' }}
+                </span>
+            </div>
+
+            <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200">
+                {{ $selectedTask['description'] ?? 'Sin descripción disponible.' }}
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button"
+                        class="rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-200 dark:hover:bg-slate-800"
+                        x-on:click="$dispatch('close-modal', 'task-summary')">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </x-modal>
 </div>

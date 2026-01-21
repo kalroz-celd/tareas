@@ -22,6 +22,7 @@ class Index extends Component
     #[Url] public string $sortDir   = 'desc';
 
     public int $perPage = 10;
+    public ?array $selectedTask = null;
 
     public function mount(Project $project): void
     {
@@ -47,6 +48,26 @@ class Index extends Component
         $this->project->tasks()->whereKey($id)->delete();
         session()->flash('toast', 'Tarea eliminada.');
         $this->resetPage();
+    }
+
+    public function openTaskSummary(int $taskId): void
+    {
+        $task = $this->project->tasks()->with('project:id,name')->findOrFail($taskId);
+
+        $this->selectedTask = [
+            'id' => $task->id,
+            'title' => $task->title,
+            'description' => $task->description,
+            'status_label' => $task->status_label,
+            'status_badge_class' => $task->status_badge_class,
+            'priority_label' => $task->priority_label,
+            'priority_badge_classes' => $task->priority_badge_classes,
+            'due_date' => optional($task->due_date)->format('d/m/Y') ?? '—',
+            'project_name' => $task->project?->name ?? '—',
+            'project_id' => $task->project_id,
+        ];
+
+        $this->dispatch('open-modal', 'task-summary');
     }
 
     #[Layout('layouts.app')]

@@ -13,6 +13,7 @@ class Dashboard extends Component
     public $recentTasks;   // Collection
     public array $projects = [];
     public array $activity = [];
+    public ?array $selectedTask = null;
 
     public function mount(): void
     {
@@ -117,6 +118,26 @@ class Dashboard extends Component
                 'when' => $t->updated_at->diffForHumans(),
             ];
         })->all();
+    }
+
+    public function openTaskSummary(int $taskId): void
+    {
+        $task = Task::with('project:id,name')->findOrFail($taskId);
+
+        $this->selectedTask = [
+            'id' => $task->id,
+            'title' => $task->title,
+            'description' => $task->description,
+            'status_label' => $task->status_label,
+            'status_badge_class' => $task->status_badge_class,
+            'priority_label' => $task->priority_label,
+            'priority_badge_classes' => $task->priority_badge_classes,
+            'due_date' => optional($task->due_date)->format('d/m/Y') ?? '—',
+            'project_name' => $task->project?->name ?? '—',
+            'project_id' => $task->project_id,
+        ];
+
+        $this->dispatch('open-modal', 'task-summary');
     }
 
     #[Layout('layouts.app')]

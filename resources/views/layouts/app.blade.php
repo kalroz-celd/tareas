@@ -35,10 +35,17 @@
         {{-- Contenido principal --}}
         <main class="lg:pl-72 flex-1">
             {{-- Header opcional --}}
-            @if (isset($header))
+            @php($hasNotifications = \App\Livewire\Notifications\Header::hasNotifications())
+            @if (isset($header) || $hasNotifications)
                 <header class="sticky top-0 z-30 border-b border-slate-200/70 bg-white/70 backdrop-blur dark:border-slate-800/70 dark:bg-slate-950/60">
-                    <div class="px-4 sm:px-6 lg:px-8 py-4">
-                        {{ $header }}
+                    <div class="px-4 sm:px-6 lg:px-8 py-4 space-y-4">
+                        @if (isset($header))
+                            {{ $header }}
+                        @endif
+
+                        @if ($hasNotifications)
+                            <livewire:notifications.header />
+                        @endif
                     </div>
                 </header>
             @endif

@@ -14,6 +14,9 @@ class Index extends Component
     #[Url]
     public string $view = 'projects';
 
+    #[Url]
+    public ?string $month = null;
+
     #[Layout('layouts.app')]
     public function render()
     {
@@ -41,6 +44,8 @@ class Index extends Component
         })->all();
 
         $projectsTimeline = $this->buildTimeline($projectItems);
+        $projectsTimeline['months'] = $this->buildMonthSegments($projectsTimeline['start'], $projectsTimeline['end']);
+        $projectsTimeline['month_breakdown'] = $this->buildMonthBreakdown($projectItems, $this->month);
 
         $projectTaskTimelines = $projects->map(function (Project $project) {
             $taskItems = $project->tasks->map(function (Task $task) {
@@ -61,10 +66,14 @@ class Index extends Component
                 ];
             })->all();
 
+            $timeline = $this->buildTimeline($taskItems);
+
             return [
                 'project' => $project->name,
                 'project_dates' => $this->formatProjectDates($project),
-                'timeline' => $this->buildTimeline($taskItems),
+                'timeline' => $timeline,
+                'months' => $this->buildMonthSegments($timeline['start'], $timeline['end']),
+                'month_breakdown' => $this->buildMonthBreakdown($taskItems, $this->month),
             ];
         });
 
@@ -92,11 +101,24 @@ class Index extends Component
             ->all();
 
         $allTasksTimeline = $this->buildTimeline($allTasksItems);
+        $allTasksTimeline['months'] = $this->buildMonthSegments($allTasksTimeline['start'], $allTasksTimeline['end']);
+        $allTasksTimeline['month_breakdown'] = $this->buildMonthBreakdown($allTasksItems, $this->month);
+
+        $selectedMonthLabel = null;
+
+        if ($this->month) {
+            try {
+                $selectedMonthLabel = Carbon::createFromFormat('Y-m', $this->month)->translatedFormat('F Y');
+            } catch (\Throwable $e) {
+                $selectedMonthLabel = null;
+            }
+        }
 
         return view('livewire.gantt.index', [
             'projectsTimeline' => $projectsTimeline,
             'projectTaskTimelines' => $projectTaskTimelines,
             'allTasksTimeline' => $allTasksTimeline,
+            'selectedMonthLabel' => $selectedMonthLabel,
         ]);
     }
 
@@ -136,6 +158,89 @@ class Index extends Component
             'start' => $minDate,
             'end' => $maxDate,
             'total_days' => $totalDays,
+        ];
+    }
+
+    private function buildMonthSegments(?Carbon $start, ?Carbon $end): array
+    {
+        if (!$start || !$end) {
+            return [];
+        }
+
+        $startDate = $start->copy()->startOfMonth();
+        $endDate = $end->copy()->startOfMonth();
+        $totalDays = max(1, $start->diffInDays($end) + 1);
+
+        $months = [];
+        $cursor = $startDate->copy();
+
+        while ($cursor <= $endDate) {
+            $segmentStart = $cursor->copy()->startOfMonth();
+            $segmentEnd = $cursor->copy()->endOfMonth();
+
+            if ($segmentStart->lessThan($start)) {
+                $segmentStart = $start->copy();
+            }
+
+            if ($segmentEnd->greaterThan($end)) {
+                $segmentEnd = $end->copy();
+            }
+
+            $segmentDays = max(1, $segmentStart->diffInDays($segmentEnd) + 1);
+            $offsetDays = $start->diffInDays($segmentStart);
+
+            $months[] = [
+                'key' => $cursor->format('Y-m'),
+                'label' => $cursor->translatedFormat('F Y'),
+                'offset_percent' => ($offsetDays / $totalDays) * 100,
+                'duration_percent' => ($segmentDays / $totalDays) * 100,
+            ];
+
+            $cursor->addMonthNoOverflow()->startOfMonth();
+        }
+
+        return $months;
+    }
+
+    private function buildMonthBreakdown(array $items, ?string $monthKey): array
+    {
+        if (!$monthKey) {
+            return [
+                'month' => null,
+                'days' => [],
+            ];
+        }
+
+        try {
+            $month = Carbon::createFromFormat('Y-m', $monthKey)->startOfMonth();
+        } catch (\Throwable $e) {
+            return [
+                'month' => null,
+                'days' => [],
+            ];
+        }
+
+        $daysInMonth = $month->daysInMonth;
+        $days = [];
+
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $date = $month->copy()->day($day)->startOfDay();
+            $tasks = collect($items)->filter(function (array $item) use ($date) {
+                return $date->betweenIncluded($item['start'], $item['end']);
+            })->map(fn (array $item) => [
+                'label' => $item['label'],
+                'style' => $item['bar_style'],
+            ])->values()->all();
+
+            $days[] = [
+                'date' => $date,
+                'tasks' => $tasks,
+            ];
+        }
+
+        return [
+            'month' => $month,
+            'days' => $days,
         ];
     }
 

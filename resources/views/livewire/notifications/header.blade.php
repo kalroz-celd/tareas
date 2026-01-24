@@ -11,7 +11,7 @@
             >
                 <span class="relative inline-flex">
                     <img src="{{ url('bell.png') }}" alt="notificaciones" width="20">
-                    <span class="absolute -right-2 -top-2 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-rose-500 px-1 text-xs font-semibold leading-none text-white">
+                    <span style="right: -0.75rem; top: -0.75rem" class="absolute inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-rose-500 px-1 text-xs font-semibold leading-none text-white">
                         {{ $totalNotifications }}
                     </span>
                 </span>

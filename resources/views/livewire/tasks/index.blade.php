@@ -76,6 +76,7 @@
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                     @forelse($tasks as $t)
                         <tr class="text-slate-900 dark:text-white cursor-pointer"
+                            wire:key="project-task-card-{{ $t->id }}"
                             wire:click="openTaskSummary({{ $t->id }})">
                             <td class="px-4 py-3">
                                 <div class="font-semibold">{{ $t->title }}</div>
@@ -151,7 +152,8 @@
         <div class="md:hidden divide-y divide-slate-100 dark:divide-slate-800">
             @forelse($tasks as $t)
                 <div class="p-4 space-y-2 cursor-pointer"
-                     wire:click="openTaskSummary({{ $t->id }})">
+                    wire:key="project-task-card-{{ $t->id }}"
+                    wire:click="openTaskSummary({{ $t->id }})">
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <div class="font-extrabold text-slate-900 dark:text-white">{{ $t->title }}</div>

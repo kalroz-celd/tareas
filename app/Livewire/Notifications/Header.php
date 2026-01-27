@@ -25,8 +25,9 @@ class Header extends Component
 
         $taskCount = Task::query()
             ->whereNotNull('due_date')
-            ->whereIn('status', ['todo', 'doing', 'blocked'])
-            ->whereBetween('due_date', [$today, $tomorrow])
+            ->open()
+            ->whereDate('due_date', '>=', $today)
+            ->whereDate('due_date', '<=', $tomorrow)
             ->count();
 
         $paymentCount = Project::query()

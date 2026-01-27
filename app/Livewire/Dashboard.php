@@ -26,13 +26,13 @@ class Dashboard extends Component
         $weekStart = $now->copy()->startOfWeek();
 
         // Stats
-        $openTasks = Task::query()->whereIn('status', ['todo','doing','blocked'])->count();
+        $openTasks = Task::query()->open()->count();
         $openCreatedThisWeek = Task::query()
-            ->whereIn('status', ['todo','doing','blocked'])
+            ->open()
             ->where('created_at', '>=', $weekStart)
             ->count();
 
-        $inProgress = Task::query()->where('status', 'doing')->count();
+        $inProgress = Task::query()->inProgress()->count();
         $blocked    = Task::query()->where('status', 'blocked')->count();
 
         $doneTotal = Task::query()->where('status', 'done')->count();

@@ -11,6 +11,8 @@ class Task extends Model
         'doing' => 'En progreso',
         'done' => 'Hecha',
         'blocked' => 'Bloqueada',
+        'pending' => 'Por hacer',
+        'in_progress' => 'En progreso',
     ];
 
     public const STATUS_BADGE_CLASSES = [
@@ -18,7 +20,12 @@ class Task extends Model
         'doing' => 'bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-200',
         'done' => 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200',
         'blocked' => 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-200',
+        'pending' => 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200',
+        'in_progress' => 'bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-200',
     ];
+
+    public const OPEN_STATUSES = ['todo', 'doing', 'blocked', 'pending', 'in_progress'];
+    public const IN_PROGRESS_STATUSES = ['doing', 'in_progress'];
 
     public const PRIORITY_LABELS = [
         'low' => 'Baja',
@@ -40,6 +47,16 @@ class Task extends Model
         return $this->belongsTo(\App\Models\Project::class);
     }
 
+    public function scopeOpen($query)
+    {
+        return $query->whereIn('status', self::OPEN_STATUSES);
+    }
+
+    public function scopeInProgress($query)
+    {
+        return $query->whereIn('status', self::IN_PROGRESS_STATUSES);
+    }
+
     public function getStatusLabelAttribute(): string
     {
         return self::STATUS_LABELS[$this->status] ?? ucfirst((string) $this->status);
@@ -55,7 +72,9 @@ class Task extends Model
     {
         return match ($this->status) {
             'todo' => 'background-color:#f1f5f9;color:#334155;',
+            'pending' => 'background-color:#f1f5f9;color:#334155;',
             'doing' => 'background-color:#e0f2fe;color:#0369a1;',
+            'in_progress' => 'background-color:#e0f2fe;color:#0369a1;',
             'done' => 'background-color:#d1fae5;color:#047857;',
             'blocked' => 'background-color:#ffe4e6;color:#be123c;',
             default => 'background-color:#f1f5f9;color:#334155;',

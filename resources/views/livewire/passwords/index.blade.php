@@ -205,16 +205,19 @@
         </div>
     </div>
 
-    <div x-data="{ open: @entangle('showModal') }" x-cloak>
-        <div x-show="open" class="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
-            <div class="absolute inset-0 bg-slate-900/60" @click="open = false; $wire.closeModal()"></div>
-            <div class="relative w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-5 shadow-xl dark:border-slate-800 dark:bg-slate-900 transition-colors duration-300">
+    @if($showModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
+            <button type="button"
+                    wire:click="closeModal"
+                    class="absolute inset-0 bg-slate-900/60"
+                    aria-label="Cerrar"></button>
+            <div class="relative w-full max-w-xl rounded-2xl border border-slate-200 bg-white p-4 shadow-xl dark:border-slate-800 dark:bg-slate-900 transition-colors duration-300 max-h-[80vh] overflow-y-auto">
                 <div class="flex items-center justify-between">
                     <h2 class="text-lg font-semibold text-slate-900 dark:text-white">
                         {{ $editingId ? 'Editar credencial' : 'Nueva credencial' }}
                     </h2>
                     <button type="button"
-                            @click="open = false; $wire.closeModal()"
+                            wire:click="closeModal"
                             class="text-xs font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
                         Cancelar
                     </button>
@@ -286,7 +289,7 @@
 
                     <div class="md:col-span-2 flex items-center justify-end gap-2">
                         <button type="button"
-                                @click="open = false; $wire.closeModal()"
+                                wire:click="closeModal"
                                 class="rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-800 dark:border-slate-700 dark:text-slate-300">
                             Cancelar
                         </button>
@@ -299,5 +302,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 </div>

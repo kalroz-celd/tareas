@@ -71,7 +71,7 @@
 
            <div class="flex-1 space-y-4 px-6 py-5">
                     @if (count($taskNotifications))
-                        <div class="rounded-xl border border-slate-100 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950/40">
+                        <div class="rounded-xl border border-slate-100 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900">
                             <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                                 Tareas por vencer
                             </div>

@@ -88,7 +88,15 @@
 
                             <td class="px-4 py-3">
                                 <div class="font-semibold text-slate-800 dark:text-slate-100">
-                                    {{ $t->project?->name ?? '—' }}
+                                    @if($t->project_id)
+                                        <a href="{{ route('projects.tasks.index', $t->project_id) }}"
+                                           x-on:click.stop
+                                           class="text-indigo-600 hover:text-indigo-700 dark:text-indigo-300 dark:hover:text-indigo-200">
+                                            {{ $t->project?->name ?? '—' }}
+                                        </a>
+                                    @else
+                                        {{ $t->project?->name ?? '—' }}
+                                    @endif
                                 </div>
                                 @if($t->project_id)
                                     <div class="text-xs text-slate-500 dark:text-slate-400">
@@ -148,7 +156,16 @@
                         <div>
                             <div class="font-extrabold text-slate-900 dark:text-white">{{ $t->title }}</div>
                             <div class="text-xs text-slate-500 dark:text-slate-400">
-                                Proyecto: <span class="font-semibold text-slate-700 dark:text-slate-200">{{ $t->project?->name ?? '—' }}</span>
+                                Proyecto:
+                                @if($t->project_id)
+                                    <a href="{{ route('projects.tasks.index', $t->project_id) }}"
+                                       x-on:click.stop
+                                       class="font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-300 dark:hover:text-indigo-200">
+                                        {{ $t->project?->name ?? '—' }}
+                                    </a>
+                                @else
+                                    <span class="font-semibold text-slate-700 dark:text-slate-200">{{ $t->project?->name ?? '—' }}</span>
+                                @endif
                             </div>
                         </div>
 

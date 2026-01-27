@@ -55,7 +55,17 @@
                             <tr class="border-b border-slate-200/50 dark:border-slate-800/50 hover:bg-slate-50/70 dark:hover:bg-slate-900/40 cursor-pointer"
                                 wire:click="openTaskSummary({{ $t->id }})">
                                 <td class="p-4 font-semibold">{{ $t->title }}</td>
-                                <td class="p-4 text-slate-600 dark:text-slate-400">{{ $t->project?->name ?? '—' }}</td>
+                                <td class="p-4 text-slate-600 dark:text-slate-400">
+                                    @if($t->project_id)
+                                        <a href="{{ route('projects.tasks.index', $t->project_id) }}"
+                                           x-on:click.stop
+                                           class="font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-300 dark:hover:text-indigo-200">
+                                            {{ $t->project?->name ?? '—' }}
+                                        </a>
+                                    @else
+                                        {{ $t->project?->name ?? '—' }}
+                                    @endif
+                                </td>
                                 <td class="p-4">
                                     <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold transition-colors duration-300 {{ $t->priority_badge_classes }}"
                                           style="{{ $t->priority_badge_style }}">

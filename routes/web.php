@@ -11,6 +11,7 @@ use App\Livewire\Projects\Tasks\Edit as ProjectTasksEdit;
 use App\Livewire\Clients\Index as ClientsIndex;
 use App\Livewire\Clients\Show as ClientsShow;
 use App\Livewire\Gantt\Index as GanttIndex;
+use App\Livewire\Passwords\Index as PasswordsIndex;
 
 //Route::view('/', 'welcome');
 
@@ -34,6 +35,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/clients', ClientsIndex::class)->name('clients.index');
     Route::get('/clients/{client}', ClientsShow::class)->name('clients.show');
+
+    Route::get('/passwords', PasswordsIndex::class)->name('passwords.index');
 });
 
 require __DIR__.'/auth.php';

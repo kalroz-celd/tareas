@@ -25,6 +25,7 @@ class Index extends Component
     public int $perPage = 12;
 
     public ?int $editingId = null;
+    public bool $showModal = false;
     public string $title = '';
     public string $entryCategory = 'personal';
     public ?int $projectId = null;
@@ -61,6 +62,8 @@ class Index extends Component
         $this->secret = $entry->secret;
         $this->url = $entry->url ?? '';
         $this->notes = $entry->notes ?? '';
+        $this->showModal = true;
+        $this->resetValidation();
     }
 
     public function save(): void
@@ -100,6 +103,8 @@ class Index extends Component
         }
 
         $this->resetForm();
+        $this->showModal = false;
+        $this->resetPage();
     }
 
     public function resetForm(): void
@@ -112,6 +117,20 @@ class Index extends Component
         $this->secret = '';
         $this->url = '';
         $this->notes = '';
+    }
+
+    public function openCreateModal(): void
+    {
+        $this->resetForm();
+        $this->resetValidation();
+        $this->showModal = true;
+    }
+
+    public function closeModal(): void
+    {
+        $this->showModal = false;
+        $this->resetForm();
+        $this->resetValidation();
     }
 
     public function delete(int $id): void

@@ -2,7 +2,7 @@
     @php($totalNotifications = count($taskNotifications) + count($paymentNotifications))
     <div
         x-data="{ open: false }"
-        x-effect="document.documentElement.classList.toggle('overflow-hidden', open)"
+        x-effect="document.documentElement.classList.toggle('overflow-hidden', open); document.body.classList.toggle('overflow-hidden', open)"
         @keydown.escape.window="open = false"
     >
         <div class="flex justify-end">
@@ -26,7 +26,7 @@
             x-cloak
             x-show="open"
             x-transition.opacity
-            class="fixed inset-0 z-[60] bg-slate-900/40"
+            class="fixed inset-0 z-[9998] bg-slate-900/40"
             @click="open = false"
         ></div>
 
@@ -40,7 +40,7 @@
             x-transition:leave="transition ease-in duration-150 transform"
             x-transition:leave-start="translate-x-0"
             x-transition:leave-end="translate-x-full"
-            class="fixed right-0 top-0 z-[70] h-full w-full max-w-md border-l border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-950">
+            class="fixed right-0 top-0 z-[9999] h-full w-full max-w-md border-l border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-950">
             <div class="flex h-full flex-col">
                 <div class="flex items-start justify-between border-b border-slate-200 px-6 py-5 dark:border-slate-800">
                     <div>

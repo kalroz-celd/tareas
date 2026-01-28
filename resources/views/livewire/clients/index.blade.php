@@ -62,7 +62,6 @@
                                    class="font-semibold text-slate-900 hover:underline dark:text-slate-100">
                                     {{ $client->name }}
                                 </a>
-                                <div class="text-xs text-slate-500 dark:text-slate-400">ID: {{ $client->id }}</div>
                             </td>
 
                             <td class="px-4 py-3 text-sm text-slate-700 dark:text-slate-300">

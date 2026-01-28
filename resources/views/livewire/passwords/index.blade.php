@@ -25,15 +25,15 @@
 
     <div class="space-y-4">
         <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 transition-colors duration-300">
-            <div class="flex flex-col gap-3 md:flex-row md:items-end md:flex-nowrap">
-                <div class="md:flex-1">
+            <div class="flex flex-wrap items-end gap-3">
+                <div class="flex-1 min-w-[220px]">
                     <label class="text-xs font-semibold text-slate-600 dark:text-slate-300">Buscar</label>
                     <input type="text"
                            wire:model.live.debounce.400ms="search"
                            placeholder="Título, usuario, URL o notas"
                            class="mt-1 w-full rounded-xl border-slate-200 bg-white text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white" />
                 </div>
-                <div class="md:w-48">
+                <div class="w-48 min-w-[160px]">
                     <label class="text-xs font-semibold text-slate-600 dark:text-slate-300">Tipo</label>
                     <select wire:model.live="filterCategory"
                             class="mt-1 w-full rounded-xl border-slate-200 bg-white text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
@@ -42,7 +42,7 @@
                         <option value="project">Proyecto</option>
                     </select>
                 </div>
-                <div class="md:w-60">
+                <div class="w-60 min-w-[200px]">
                     <label class="text-xs font-semibold text-slate-600 dark:text-slate-300">Proyecto</label>
                     <select wire:model.live="filterProject"
                             class="mt-1 w-full rounded-xl border-slate-200 bg-white text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white">

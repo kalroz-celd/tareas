@@ -96,7 +96,9 @@
                                     </span>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <div x-data="{ reveal: false, secret: @js($entry->secret) }" class="flex items-center gap-2">
+                                    <div x-data="{ reveal: false, secret: @js($entry->secret) }"
+                                         wire:key="password-secret-{{ $entry->id }}-{{ $entry->updated_at?->timestamp }}"
+                                         class="flex items-center gap-2">
                                         <span class="font-mono text-xs" x-text="reveal ? secret : '••••••••'"></span>
                                         <button type="button"
                                                 class="text-xs font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-300"
@@ -163,7 +165,9 @@
                             Usuario: <span class="text-slate-700 dark:text-slate-200">{{ $entry->username ?? '—' }}</span>
                         </div>
 
-                        <div x-data="{ reveal: false, secret: @js($entry->secret) }" class="flex items-center gap-2 text-xs">
+                        <div x-data="{ reveal: false, secret: @js($entry->secret) }"
+                             wire:key="password-secret-mobile-{{ $entry->id }}-{{ $entry->updated_at?->timestamp }}"
+                             class="flex items-center gap-2 text-xs">
                             <span class="font-mono" x-text="reveal ? secret : '••••••••'"></span>
                             <button type="button"
                                     class="font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-300"

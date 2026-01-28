@@ -255,7 +255,8 @@
                     <div>
                         <label class="text-xs font-semibold text-slate-600 dark:text-slate-300">Contrasena</label>
                         <input type="password"
-                               wire:model.defer="secret"
+                               wire:model.live.debounce.300ms="secret"
+                               autocomplete="new-password"
                                class="mt-1 w-full rounded-xl border-slate-200 bg-white text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white" />
                         @error('secret') <p class="text-xs text-rose-500 mt-1">{{ $message }}</p> @enderror
                     </div>

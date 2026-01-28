@@ -82,7 +82,7 @@ class Index extends Component
             'entryCategory' => ['required', Rule::in(['project', 'personal'])],
             'projectId' => ['nullable', 'integer', 'exists:projects,id', Rule::requiredIf($this->entryCategory === 'project')],
             'username' => ['nullable', 'string', 'max:255'],
-            'secret' => ['required', 'string', 'max:2000'],
+            'secret' => [$this->editingId ? 'nullable' : 'required', 'string', 'max:2000'],
             'url' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string', 'max:3000'],
         ];
@@ -99,12 +99,17 @@ class Index extends Component
             'url' => $this->url === '' ? null : $this->url,
             'notes' => $this->notes === '' ? null : $this->notes,
         ];
+        if ($this->editingId && ($this->secret === '' || $this->secret === null)) {
+            unset($payload['secret']);
+        }
 
         if ($this->editingId) {
-            PasswordEntry::query()
+            $entry = PasswordEntry::query()
                 ->where('user_id', Auth::id())
-                ->whereKey($this->editingId)
-                ->update($payload);
+                ->findOrFail($this->editingId);
+
+            $entry->fill($payload);
+            $entry->save();
             session()->flash('toast', 'Credencial actualizada.');
         } else {
             PasswordEntry::query()->create($payload);

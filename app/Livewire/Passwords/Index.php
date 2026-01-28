@@ -203,12 +203,16 @@ class Index extends Component
         }
 
         $entries = $query->orderBy($this->sortField, $this->sortDir)
-            ->paginate($this->perPage);
+            ->get();
+
+        $entriesByProject = $entries->groupBy(function ($entry) {
+            return $entry->project?->name ?? 'Sin proyecto';
+        });
 
         $projects = Project::query()
             ->orderBy('name')
             ->get(['id', 'name']);
 
-        return view('livewire.passwords.index', compact('entries', 'projects'));
+        return view('livewire.passwords.index', compact('entries', 'entriesByProject', 'projects'));
     }
 }

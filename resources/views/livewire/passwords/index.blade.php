@@ -223,7 +223,7 @@
                     </button>
                 </div>
 
-                <div class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2" x-data="{ category: @entangle('entryCategory') }">
+                <div class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
                     <div class="md:col-span-2">
                         <label class="text-xs font-semibold text-slate-600 dark:text-slate-300">Titulo</label>
                         <input type="text"
@@ -234,24 +234,14 @@
 
                     <div>
                         <label class="text-xs font-semibold text-slate-600 dark:text-slate-300">Tipo</label>
-                        <select wire:model.defer="entryCategory"
+                        <select wire:model.defer="entryType"
                                 class="mt-1 w-full rounded-xl border-slate-200 bg-white text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
                             <option value="personal">Personal</option>
-                            <option value="project">Proyecto</option>
-                        </select>
-                        @error('entryCategory') <p class="text-xs text-rose-500 mt-1">{{ $message }}</p> @enderror
-                    </div>
-
-                    <div x-show="category === 'project'">
-                        <label class="text-xs font-semibold text-slate-600 dark:text-slate-300">Proyecto</label>
-                        <select wire:model.defer="projectId"
-                                class="mt-1 w-full rounded-xl border-slate-200 bg-white text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
-                            <option value="">Selecciona un proyecto</option>
                             @foreach($projects as $project)
-                                <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                <option value="project:{{ $project->id }}">{{ $project->name }}</option>
                             @endforeach
                         </select>
-                        @error('projectId') <p class="text-xs text-rose-500 mt-1">{{ $message }}</p> @enderror
+                        @error('entryCategory') <p class="text-xs text-rose-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div>

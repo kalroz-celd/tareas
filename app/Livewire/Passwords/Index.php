@@ -16,8 +16,7 @@ class Index extends Component
     use WithPagination;
 
     #[Url] public string $search = '';
-    #[Url] public string $filterCategory = '';
-    #[Url] public string $filterProject = '';
+    #[Url] public string $filterType = '';
 
     #[Url] public string $sortField = 'updated_at';
     #[Url] public string $sortDir   = 'desc';
@@ -26,6 +25,7 @@ class Index extends Component
 
     public ?int $editingId = null;
     public bool $showModal = false;
+    public string $entryType = 'personal';
     public string $title = '';
     public string $entryCategory = 'personal';
     public ?int $projectId = null;
@@ -35,8 +35,7 @@ class Index extends Component
     public string $notes = '';
 
     public function updatingSearch(): void { $this->resetPage(); }
-    public function updatingFilterCategory(): void { $this->resetPage(); }
-    public function updatingFilterProject(): void { $this->resetPage(); }
+    public function updatingFilterType(): void { $this->resetPage(); }
 
     public function sortBy(string $field): void
     {
@@ -58,6 +57,9 @@ class Index extends Component
         $this->title = $entry->title;
         $this->entryCategory = $entry->category;
         $this->projectId = $entry->project_id;
+        $this->entryType = $entry->category === 'project' && $entry->project_id
+            ? "project:{$entry->project_id}"
+            : 'personal';
         $this->username = $entry->username ?? '';
         $this->secret = $entry->secret;
         $this->url = $entry->url ?? '';
@@ -66,8 +68,15 @@ class Index extends Component
         $this->resetValidation();
     }
 
+    public function updatedEntryType(string $value): void
+    {
+        $this->syncEntryType($value);
+    }
+
     public function save(): void
     {
+        $this->syncEntryType($this->entryType);
+
         $rules = [
             'title' => ['required', 'string', 'max:255'],
             'entryCategory' => ['required', Rule::in(['project', 'personal'])],
@@ -110,6 +119,7 @@ class Index extends Component
     public function resetForm(): void
     {
         $this->editingId = null;
+        $this->entryType = 'personal';
         $this->title = '';
         $this->entryCategory = 'personal';
         $this->projectId = null;
@@ -117,6 +127,21 @@ class Index extends Component
         $this->secret = '';
         $this->url = '';
         $this->notes = '';
+    }
+
+    private function syncEntryType(string $value): void
+    {
+        if (str_starts_with($value, 'project:')) {
+            $projectId = (int) str_replace('project:', '', $value);
+            if ($projectId > 0) {
+                $this->entryCategory = 'project';
+                $this->projectId = $projectId;
+                return;
+            }
+        }
+
+        $this->entryCategory = 'personal';
+        $this->projectId = null;
     }
 
     public function openCreateModal(): void
@@ -160,12 +185,16 @@ class Index extends Component
             });
         }
 
-        if ($this->filterCategory !== '') {
-            $query->where('category', $this->filterCategory);
-        }
-
-        if ($this->filterProject !== '') {
-            $query->where('project_id', $this->filterProject);
+        if ($this->filterType !== '') {
+            if ($this->filterType === 'personal') {
+                $query->where('category', 'personal');
+            } elseif (str_starts_with($this->filterType, 'project:')) {
+                $projectId = (int) str_replace('project:', '', $this->filterType);
+                if ($projectId > 0) {
+                    $query->where('category', 'project')
+                        ->where('project_id', $projectId);
+                }
+            }
         }
 
         $entries = $query->orderBy($this->sortField, $this->sortDir)

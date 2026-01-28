@@ -30,7 +30,7 @@ class Index extends Component
     public string $entryCategory = 'personal';
     public ?int $projectId = null;
     public string $username = '';
-    public string $secret = '';
+    public ?string $secret = '';
     public string $url = '';
     public string $notes = '';
 
@@ -61,7 +61,7 @@ class Index extends Component
             ? "project:{$entry->project_id}"
             : 'personal';
         $this->username = $entry->username ?? '';
-        $this->secret = $entry->secret;
+        $this->secret = $entry->secret ?? '';
         $this->url = $entry->url ?? '';
         $this->notes = $entry->notes ?? '';
         $this->showModal = true;

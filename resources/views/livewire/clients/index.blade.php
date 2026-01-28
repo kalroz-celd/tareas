@@ -48,7 +48,7 @@
                             Contacto
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400">
-                            Proyectos
+                            Proyectos asociados
                         </th>
                         <th class="px-4 py-3"></th>
                     </tr>

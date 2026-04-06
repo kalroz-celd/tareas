@@ -67,22 +67,28 @@
                         @endforeach
                     </div>
                 </div>
-                <div class="mt-6 space-y-4">
-                    @foreach ($projectsTimeline['items'] as $item)
-                        <div class="grid gap-3 lg:grid-cols-[260px_1fr]">
-                            <div>
-                                <p class="font-semibold text-slate-900 dark:text-white">{{ $item['label'] }}</p>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">{{ $item['sub_label'] }}</p>
-                            </div>
-                            <div>
-                                <div class="relative h-6 rounded-full bg-slate-100 dark:bg-slate-800">
-                                    <div class="absolute top-0 h-6 rounded-full shadow-sm"
-                                         style="left: {{ $item['offset_percent'] }}%; width: {{ $item['duration_percent'] }}%; {{ $item['bar_style'] }}"></div>
-                                </div>
-                                <div class="mt-1 text-xs text-slate-500 dark:text-slate-400">{{ $item['range_label'] }}</div>
-                            </div>
-                        </div>
-                    @endforeach
+                <div class="mt-6">
+                    <div class="h-[420px] rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-950/50">
+                        <canvas id="gantt-projects-chart" data-gantt-chart class="h-full w-full"></canvas>
+                    </div>
+                    @php
+                        $projectsChartPayload = [
+                            'items' => collect($projectsTimeline['items'])->map(function ($item) {
+                                return [
+                                    'label' => $item['label'],
+                                    'start' => $item['start']->timestamp * 1000,
+                                    'end' => $item['end']->timestamp * 1000,
+                                    'range' => $item['range_label'],
+                                    'subLabel' => $item['sub_label'],
+                                ];
+                            })->values()->all(),
+                            'start' => $projectsTimeline['start']?->timestamp ? $projectsTimeline['start']->timestamp * 1000 : null,
+                            'end' => $projectsTimeline['end']?->timestamp ? $projectsTimeline['end']->timestamp * 1000 : null,
+                        ];
+                    @endphp
+                    <script type="application/json" data-chart-config-for="gantt-projects-chart">
+                        @json($projectsChartPayload)
+                    </script>
                 </div>
                 @if ($projectsTimeline['month_breakdown']['month'])
                     <div class="mt-8">
@@ -140,22 +146,29 @@
                                 @endforeach
                             </div>
                         </div>
-                        <div class="mt-6 space-y-4">
-                            @foreach ($projectTimeline['timeline']['items'] as $item)
-                                <div class="grid gap-3 lg:grid-cols-[260px_1fr]">
-                                    <div>
-                                        <p class="font-semibold text-slate-900 dark:text-white">{{ $item['label'] }}</p>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400">{{ $item['sub_label'] }}</p>
-                                    </div>
-                                    <div>
-                                        <div class="relative h-6 rounded-full bg-slate-100 dark:bg-slate-800">
-                                            <div class="absolute top-0 h-6 rounded-full shadow-sm"
-                                                 style="left: {{ $item['offset_percent'] }}%; width: {{ $item['duration_percent'] }}%; {{ $item['bar_style'] }}"></div>
-                                        </div>
-                                        <div class="mt-1 text-xs text-slate-500 dark:text-slate-400">{{ $item['range_label'] }}</div>
-                                    </div>
-                                </div>
-                            @endforeach
+                        <div class="mt-6">
+                            @php($projectChartId = 'gantt-project-tasks-chart-'.$loop->index)
+                            <div class="h-[380px] rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-950/50">
+                                <canvas id="{{ $projectChartId }}" data-gantt-chart class="h-full w-full"></canvas>
+                            </div>
+                            @php
+                                $projectTasksChartPayload = [
+                                    'items' => collect($projectTimeline['timeline']['items'])->map(function ($item) {
+                                        return [
+                                            'label' => $item['label'],
+                                            'start' => $item['start']->timestamp * 1000,
+                                            'end' => $item['end']->timestamp * 1000,
+                                            'range' => $item['range_label'],
+                                            'subLabel' => $item['sub_label'],
+                                        ];
+                                    })->values()->all(),
+                                    'start' => $projectTimeline['timeline']['start']?->timestamp ? $projectTimeline['timeline']['start']->timestamp * 1000 : null,
+                                    'end' => $projectTimeline['timeline']['end']?->timestamp ? $projectTimeline['timeline']['end']->timestamp * 1000 : null,
+                                ];
+                            @endphp
+                            <script type="application/json" data-chart-config-for="{{ $projectChartId }}">
+                                @json($projectTasksChartPayload)
+                            </script>
                         </div>
                         @if ($projectTimeline['month_breakdown']['month'])
                             <div class="mt-8">
@@ -213,22 +226,28 @@
                         @endforeach
                     </div>
                 </div>
-                <div class="mt-6 space-y-4">
-                    @foreach ($allTasksTimeline['items'] as $item)
-                        <div class="grid gap-3 lg:grid-cols-[260px_1fr]">
-                            <div>
-                                <p class="font-semibold text-slate-900 dark:text-white">{{ $item['label'] }}</p>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">{{ $item['sub_label'] }}</p>
-                            </div>
-                            <div>
-                                <div class="relative h-6 rounded-full bg-slate-100 dark:bg-slate-800">
-                                    <div class="absolute top-0 h-6 rounded-full shadow-sm"
-                                         style="left: {{ $item['offset_percent'] }}%; width: {{ $item['duration_percent'] }}%; {{ $item['bar_style'] }}"></div>
-                                </div>
-                                <div class="mt-1 text-xs text-slate-500 dark:text-slate-400">{{ $item['range_label'] }}</div>
-                            </div>
-                        </div>
-                    @endforeach
+                <div class="mt-6">
+                    <div class="h-[420px] rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-950/50">
+                        <canvas id="gantt-all-tasks-chart" data-gantt-chart class="h-full w-full"></canvas>
+                    </div>
+                    @php
+                        $allTasksChartPayload = [
+                            'items' => collect($allTasksTimeline['items'])->map(function ($item) {
+                                return [
+                                    'label' => $item['label'],
+                                    'start' => $item['start']->timestamp * 1000,
+                                    'end' => $item['end']->timestamp * 1000,
+                                    'range' => $item['range_label'],
+                                    'subLabel' => $item['sub_label'],
+                                ];
+                            })->values()->all(),
+                            'start' => $allTasksTimeline['start']?->timestamp ? $allTasksTimeline['start']->timestamp * 1000 : null,
+                            'end' => $allTasksTimeline['end']?->timestamp ? $allTasksTimeline['end']->timestamp * 1000 : null,
+                        ];
+                    @endphp
+                    <script type="application/json" data-chart-config-for="gantt-all-tasks-chart">
+                        @json($allTasksChartPayload)
+                    </script>
                 </div>
                 @if ($allTasksTimeline['month_breakdown']['month'])
                     <div class="mt-8">
@@ -262,3 +281,105 @@
         </div>
     @endif
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+    (() => {
+        const chartRegistry = new Map();
+        const palette = ['#0f172a', '#2563eb', '#16a34a', '#ea580c', '#7c3aed', '#db2777', '#0891b2'];
+
+        const formatDate = (timestamp) => new Intl.DateTimeFormat('es-CL', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+        }).format(new Date(timestamp));
+
+        const buildChart = (canvas) => {
+            const configNode = document.querySelector(`script[data-chart-config-for="${canvas.id}"]`);
+            if (!configNode) return;
+
+            const payload = JSON.parse(configNode.textContent ?? '{}');
+            const items = payload.items ?? [];
+            if (!items.length) return;
+
+            const data = items.map((item, index) => ({
+                x: [item.start, item.end],
+                y: item.label,
+                range: item.range,
+                subLabel: item.subLabel,
+                backgroundColor: palette[index % palette.length],
+            }));
+
+            const minX = payload.start ?? Math.min(...items.map((item) => item.start));
+            const maxX = payload.end ?? Math.max(...items.map((item) => item.end));
+            const padding = 1000 * 60 * 60 * 24;
+
+            const chart = new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    datasets: [{
+                        label: 'Planificación',
+                        data,
+                        parsing: {
+                            xAxisKey: 'x',
+                            yAxisKey: 'y',
+                        },
+                        borderRadius: 8,
+                        borderSkipped: false,
+                        backgroundColor: data.map((point) => point.backgroundColor),
+                        barThickness: 16,
+                    }],
+                },
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: (context) => context[0]?.raw?.y ?? '',
+                                label: (context) => context.raw?.subLabel ?? '',
+                                afterLabel: (context) => context.raw?.range ?? '',
+                            },
+                        },
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            min: minX - padding,
+                            max: maxX + padding,
+                            ticks: {
+                                callback: (value) => formatDate(value),
+                            },
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.18)',
+                            },
+                        },
+                        y: {
+                            grid: { display: false },
+                        },
+                    },
+                },
+            });
+
+            chartRegistry.set(canvas.id, chart);
+        };
+
+        const mountCharts = () => {
+            document.querySelectorAll('[data-gantt-chart]').forEach((canvas) => {
+                if (!canvas.id || chartRegistry.has(canvas.id)) return;
+                buildChart(canvas);
+            });
+        };
+
+        const destroyCharts = () => {
+            chartRegistry.forEach((chart) => chart.destroy());
+            chartRegistry.clear();
+        };
+
+        document.addEventListener('livewire:navigate', destroyCharts);
+        document.addEventListener('livewire:navigated', mountCharts);
+        mountCharts();
+    })();
+</script>

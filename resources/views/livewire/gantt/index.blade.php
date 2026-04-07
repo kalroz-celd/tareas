@@ -75,14 +75,16 @@
                     @php
                         $projectsChartPayload = [
                             'items' => collect($projectsTimeline['items'])->map(function ($item) {
+                                $projectId = $item['id'] ?? null;
+
                                 return [
                                     'label' => $item['label'],
-                                    'projectId' => $item['id'],
+                                    'projectId' => $projectId,
                                     'start' => $item['start']->timestamp * 1000,
                                     'end' => $item['end']->timestamp * 1000,
                                     'range' => $item['range_label'],
                                     'subLabel' => $item['sub_label'],
-                                    'clickUrl' => route('gantt.index', ['view' => 'projects', 'project' => $item['id'], 'month' => $month]),
+                                    'clickUrl' => $projectId ? route('gantt.index', ['view' => 'projects', 'project' => $projectId, 'month' => $month ?? null]) : null,
                                 ];
                             })->values()->all(),
                             'start' => $projectsTimeline['start']?->timestamp ? $projectsTimeline['start']->timestamp * 1000 : null,
@@ -125,7 +127,7 @@
             @endif
         </div>
 
-        @if ($selectedProjectTimeline)
+        @if (!empty($selectedProjectTimeline))
             <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 transition-colors duration-300">
                 <div class="flex items-center justify-between gap-3">
                     <div>
@@ -337,6 +339,8 @@
     (() => {
         const chartRegistry = new Map();
         const palette = ['#0f172a', '#2563eb', '#16a34a', '#ea580c', '#7c3aed', '#db2777', '#0891b2'];
+        const themeTextColor = window.matchMedia('(prefers-color-scheme: dark)').matches ? '#e2e8f0' : '#0f172a';
+        const themeGridColor = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(148, 163, 184, 0.24)' : 'rgba(148, 163, 184, 0.18)';
 
         const formatDate = (timestamp) => new Intl.DateTimeFormat('es-CL', {
             day: '2-digit',
@@ -388,6 +392,9 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
+                            backgroundColor: '#0f172a',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
                             callbacks: {
                                 title: (context) => context[0]?.raw?.y ?? '',
                                 label: (context) => context.raw?.subLabel ?? '',
@@ -401,25 +408,31 @@
                             min: minX - padding,
                             max: maxX + padding,
                             ticks: {
+                                color: themeTextColor,
+                                font: { size: 12, weight: '600' },
                                 callback: (value) => formatDate(value),
                             },
                             grid: {
-                                color: 'rgba(148, 163, 184, 0.18)',
+                                color: themeGridColor,
                             },
                         },
                         y: {
                             grid: { display: false },
+                            ticks: {
+                                color: themeTextColor,
+                                font: { size: 12, weight: '600' },
+                            },
                         },
-                        onClick: (_, elements) => {
-                            if (!payload.interactive || !elements.length) return;
+                    },
+                    onClick: (_, elements) => {
+                        if (!payload.interactive || !elements.length) return;
 
-                            const firstPoint = elements[0];
-                            const point = chart.data.datasets[firstPoint.datasetIndex]?.data?.[firstPoint.index];
+                        const firstPoint = elements[0];
+                        const point = chart.data.datasets[firstPoint.datasetIndex]?.data?.[firstPoint.index];
 
-                            if (point?.clickUrl) {
-                                window.location.href = point.clickUrl;
-                            }
-                        },
+                        if (point?.clickUrl) {
+                            window.location.href = point.clickUrl;
+                        }
                     },
                 },
             });

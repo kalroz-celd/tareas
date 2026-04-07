@@ -58,17 +58,6 @@
                 <div class="mt-6 text-sm text-slate-500 dark:text-slate-400">No hay proyectos con fechas para mostrar.</div>
             @else
                 <div class="mt-6">
-                    <div class="relative h-10 rounded-xl bg-slate-50 dark:bg-slate-800/60">
-                        @foreach ($projectsTimeline['months'] as $monthSegment)
-                            <a href="{{ route('gantt.index', ['view' => 'projects', 'month' => $monthSegment['key']]) }}"
-                               class="absolute top-1 flex h-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
-                               style="left: {{ $monthSegment['offset_percent'] }}%; width: {{ $monthSegment['duration_percent'] }}%;">
-                                {{ $monthSegment['label'] }}
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-                <div class="mt-6">
                     <div class="h-[420px] rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-950/50">
                         <canvas id="gantt-projects-chart" data-gantt-chart class="h-full w-full"></canvas>
                     </div>
@@ -188,17 +177,6 @@
                         <div class="mt-6 text-sm text-slate-500 dark:text-slate-400">Este proyecto aún no tiene tareas.</div>
                     @else
                         <div class="mt-6">
-                            <div class="relative h-10 rounded-xl bg-slate-50 dark:bg-slate-800/60">
-                                @foreach ($projectTimeline['months'] as $monthSegment)
-                                    <a href="{{ route('gantt.index', ['view' => 'project-tasks', 'month' => $monthSegment['key']]) }}"
-                                       class="absolute top-1 flex h-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
-                                       style="left: {{ $monthSegment['offset_percent'] }}%; width: {{ $monthSegment['duration_percent'] }}%;">
-                                        {{ $monthSegment['label'] }}
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
-                        <div class="mt-6">
                             @php($projectChartId = 'gantt-project-tasks-chart-'.$loop->index)
                             <div class="h-[380px] rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-950/50">
                                 <canvas id="{{ $projectChartId }}" data-gantt-chart class="h-full w-full"></canvas>
@@ -267,17 +245,6 @@
             @if (empty($allTasksTimeline['items']))
                 <div class="mt-6 text-sm text-slate-500 dark:text-slate-400">No hay tareas para mostrar.</div>
             @else
-                <div class="mt-6">
-                    <div class="relative h-10 rounded-xl bg-slate-50 dark:bg-slate-800/60">
-                        @foreach ($allTasksTimeline['months'] as $monthSegment)
-                            <a href="{{ route('gantt.index', ['view' => 'tasks', 'month' => $monthSegment['key']]) }}"
-                               class="absolute top-1 flex h-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
-                               style="left: {{ $monthSegment['offset_percent'] }}%; width: {{ $monthSegment['duration_percent'] }}%;">
-                                {{ $monthSegment['label'] }}
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
                 <div class="mt-6">
                     <div class="h-[420px] rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-950/50">
                         <canvas id="gantt-all-tasks-chart" data-gantt-chart class="h-full w-full"></canvas>

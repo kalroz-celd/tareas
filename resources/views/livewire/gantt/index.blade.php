@@ -52,7 +52,8 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 transition-colors duration-300">
             <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Ciclo de vida de proyectos</h2>
             <p class="text-sm text-slate-500 dark:text-slate-400">Rango general: {{ $projectsTimeline['start']?->format('d/m/Y') ?? '—' }} → {{ $projectsTimeline['end']?->format('d/m/Y') ?? '—' }}</p>
-
+            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Haz click sobre una barra de proyecto para ver su Gantt de tareas.</p>    
+            
             @if (empty($projectsTimeline['items']))
                 <div class="mt-6 text-sm text-slate-500 dark:text-slate-400">No hay proyectos con fechas para mostrar.</div>
             @else
@@ -76,14 +77,17 @@
                             'items' => collect($projectsTimeline['items'])->map(function ($item) {
                                 return [
                                     'label' => $item['label'],
+                                    'projectId' => $item['id'],
                                     'start' => $item['start']->timestamp * 1000,
                                     'end' => $item['end']->timestamp * 1000,
                                     'range' => $item['range_label'],
                                     'subLabel' => $item['sub_label'],
+                                    'clickUrl' => route('gantt.index', ['view' => 'projects', 'project' => $item['id'], 'month' => $month]),
                                 ];
                             })->values()->all(),
                             'start' => $projectsTimeline['start']?->timestamp ? $projectsTimeline['start']->timestamp * 1000 : null,
                             'end' => $projectsTimeline['end']?->timestamp ? $projectsTimeline['end']->timestamp * 1000 : null,
+                            'interactive' => true,
                         ];
                     @endphp
                     <script type="application/json" data-chart-config-for="gantt-projects-chart">
@@ -120,6 +124,52 @@
                 @endif
             @endif
         </div>
+
+        @if ($selectedProjectTimeline)
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 transition-colors duration-300">
+                <div class="flex items-center justify-between gap-3">
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white">
+                            Tareas del proyecto: {{ $selectedProjectTimeline['project'] }}
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">
+                            {{ $selectedProjectTimeline['timeline']['start']?->format('d/m/Y') ?? '—' }} → {{ $selectedProjectTimeline['timeline']['end']?->format('d/m/Y') ?? '—' }}
+                        </p>
+                    </div>
+                    <a href="{{ route('gantt.index', ['view' => 'projects', 'month' => $month]) }}"
+                       class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">
+                        Cerrar detalle
+                    </a>
+                </div>
+
+                @if (empty($selectedProjectTimeline['timeline']['items']))
+                    <div class="mt-4 text-sm text-slate-500 dark:text-slate-400">Este proyecto no tiene tareas registradas.</div>
+                @else
+                    @php($selectedProjectChartId = 'gantt-selected-project-chart-'.$selectedProjectTimeline['project_id'])
+                    <div class="mt-4 h-[380px] rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-950/50">
+                        <canvas id="{{ $selectedProjectChartId }}" data-gantt-chart class="h-full w-full"></canvas>
+                    </div>
+                    @php
+                        $selectedProjectChartPayload = [
+                            'items' => collect($selectedProjectTimeline['timeline']['items'])->map(function ($item) {
+                                return [
+                                    'label' => $item['label'],
+                                    'start' => $item['start']->timestamp * 1000,
+                                    'end' => $item['end']->timestamp * 1000,
+                                    'range' => $item['range_label'],
+                                    'subLabel' => $item['sub_label'],
+                                ];
+                            })->values()->all(),
+                            'start' => $selectedProjectTimeline['timeline']['start']?->timestamp ? $selectedProjectTimeline['timeline']['start']->timestamp * 1000 : null,
+                            'end' => $selectedProjectTimeline['timeline']['end']?->timestamp ? $selectedProjectTimeline['timeline']['end']->timestamp * 1000 : null,
+                        ];
+                    @endphp
+                    <script type="application/json" data-chart-config-for="{{ $selectedProjectChartId }}">
+                        @json($selectedProjectChartPayload)
+                    </script>
+                @endif
+            </div>
+        @endif
     @endif
 
     @if ($view === 'project-tasks')
@@ -308,6 +358,7 @@
                 range: item.range,
                 subLabel: item.subLabel,
                 backgroundColor: palette[index % palette.length],
+                clickUrl: item.clickUrl ?? null,
             }));
 
             const minX = payload.start ?? Math.min(...items.map((item) => item.start));
@@ -358,6 +409,16 @@
                         },
                         y: {
                             grid: { display: false },
+                        },
+                        onClick: (_, elements) => {
+                            if (!payload.interactive || !elements.length) return;
+
+                            const firstPoint = elements[0];
+                            const point = chart.data.datasets[firstPoint.datasetIndex]?.data?.[firstPoint.index];
+
+                            if (point?.clickUrl) {
+                                window.location.href = point.clickUrl;
+                            }
                         },
                     },
                 },

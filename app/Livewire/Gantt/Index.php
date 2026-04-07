@@ -17,6 +17,9 @@ class Index extends Component
     #[Url]
     public ?string $month = null;
 
+     #[Url]
+    public ?int $project = null;
+
     #[Layout('layouts.app')]
     public function render()
     {
@@ -34,6 +37,7 @@ class Index extends Component
             }
 
             return [
+                'id' => $project->id,
                 'label' => $project->name,
                 'sub_label' => $project->status_label,
                 'start' => $start,
@@ -69,6 +73,7 @@ class Index extends Component
             $timeline = $this->buildTimeline($taskItems);
 
             return [
+                'project_id' => $project->id,
                 'project' => $project->name,
                 'project_dates' => $this->formatProjectDates($project),
                 'timeline' => $timeline,
@@ -76,6 +81,12 @@ class Index extends Component
                 'month_breakdown' => $this->buildMonthBreakdown($taskItems, $this->month),
             ];
         });
+
+        $selectedProjectTimeline = null;
+        if ($this->project) {
+            $selectedProjectTimeline = $projectTaskTimelines
+                ->first(fn (array $timeline) => $timeline['project_id'] === $this->project);
+        }
 
         $allTasksItems = Task::query()
             ->with('project:id,name')
@@ -117,6 +128,7 @@ class Index extends Component
         return view('livewire.gantt.index', [
             'projectsTimeline' => $projectsTimeline,
             'projectTaskTimelines' => $projectTaskTimelines,
+            'selectedProjectTimeline' => $selectedProjectTimeline,
             'allTasksTimeline' => $allTasksTimeline,
             'selectedMonthLabel' => $selectedMonthLabel,
         ]);

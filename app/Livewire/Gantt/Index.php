@@ -52,23 +52,25 @@ class Index extends Component
         $projectsTimeline['month_breakdown'] = $this->buildMonthBreakdown($projectItems, $this->month);
 
         $projectTaskTimelines = $projects->map(function (Project $project) {
-            $taskItems = $project->tasks->map(function (Task $task) {
+            $taskItems = $project->tasks
+                    ->whereIn('status', Task::OPEN_STATUSES)
+                    ->map(function (Task $task) {
                 $start = $task->created_at->copy()->startOfDay();
                 $end = ($task->due_date ?? $task->created_at)->copy()->startOfDay();
 
-                if ($end->lessThan($start)) {
-                    $end = $start->copy();
-                }
+                    if ($end->lessThan($start)) {
+                        $end = $start->copy();
+                    }
 
-                return [
-                    'label' => $task->title,
-                    'sub_label' => $task->status_label,
-                    'start' => $start,
-                    'end' => $end,
-                    'range_label' => $start->format('d/m/Y') . ' → ' . $end->format('d/m/Y'),
-                    'bar_style' => $task->status_badge_style,
-                ];
-            })->all();
+                    return [
+                        'label' => $task->title,
+                        'sub_label' => $task->status_label,
+                        'start' => $start,
+                        'end' => $end,
+                        'range_label' => $start->format('d/m/Y') . ' → ' . $end->format('d/m/Y'),
+                        'bar_style' => $task->status_badge_style,
+                    ];
+                })->all();
 
             $timeline = $this->buildTimeline($taskItems);
 
@@ -90,6 +92,7 @@ class Index extends Component
 
         $allTasksItems = Task::query()
             ->with('project:id,name')
+            ->whereIn('status', Task::OPEN_STATUSES)
             ->orderBy('created_at')
             ->get()
             ->map(function (Task $task) {

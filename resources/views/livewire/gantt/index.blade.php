@@ -172,12 +172,11 @@
                         <p class="text-xs text-slate-500 dark:text-slate-400">Rango del proyecto: {{ $projectTimeline['project_dates'] }}</p>
                         <p class="text-xs text-slate-500 dark:text-slate-400">Rango de tareas: {{ $projectTimeline['timeline']['start']?->format('d/m/Y') ?? '—' }} → {{ $projectTimeline['timeline']['end']?->format('d/m/Y') ?? '—' }}</p>
                     </div>
-
+                    
                     @if (empty($projectTimeline['timeline']['items']))
                         <div class="mt-6 text-sm text-slate-500 dark:text-slate-400">Este proyecto aún no tiene tareas.</div>
                     @else
                         <div class="mt-6">
-                            @php($projectChartId = 'gantt-project-tasks-chart-'.$loop->index)
                             <div class="h-[380px] rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-950/50">
                                 <canvas id="{{ $projectChartId }}" data-gantt-chart class="h-full w-full"></canvas>
                             </div>
@@ -200,33 +199,33 @@
                                 @json($projectTasksChartPayload)
                             </script>
                         </div>
-                        @if ($projectTimeline['month_breakdown']['month'])
-                            <div class="mt-8">
-                                <h3 class="text-base font-semibold text-slate-900 dark:text-white">
-                                    {{ $projectTimeline['month_breakdown']['month']->translatedFormat('F Y') }}
-                                </h3>
-                                <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                                    @foreach ($projectTimeline['month_breakdown']['days'] as $day)
-                                        <div class="rounded-xl border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-                                            <div class="text-xs font-semibold text-slate-600 dark:text-slate-300">
-                                                {{ $day['date']->format('d/m') }}
-                                            </div>
-                                            @if (empty($day['tasks']))
-                                                <div class="mt-2 text-xs text-slate-400">Sin tareas.</div>
-                                            @else
-                                                <div class="mt-2 space-y-1">
-                                                    @foreach ($day['tasks'] as $task)
-                                                        <div class="rounded-full px-2 py-1 text-[11px] font-semibold" style="{{ $task['style'] }}">
-                                                            {{ $task['label'] }}
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            @endif
+                    @endif
+                    @if ($projectTimeline['month_breakdown']['month'])
+                        <div class="mt-8">
+                            <h3 class="text-base font-semibold text-slate-900 dark:text-white">
+                                {{ $projectTimeline['month_breakdown']['month']->translatedFormat('F Y') }}
+                            </h3>
+                            <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                                @foreach ($projectTimeline['month_breakdown']['days'] as $day)
+                                    <div class="rounded-xl border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+                                        <div class="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                                            {{ $day['date']->format('d/m') }}
                                         </div>
-                                    @endforeach
-                                </div>
+                                        @if (empty($day['tasks']))
+                                            <div class="mt-2 text-xs text-slate-400">Sin tareas.</div>
+                                        @else
+                                            <div class="mt-2 space-y-1">
+                                                @foreach ($day['tasks'] as $task)
+                                                    <div class="rounded-full px-2 py-1 text-[11px] font-semibold" style="{{ $task['style'] }}">
+                                                        {{ $task['label'] }}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endforeach
                             </div>
-                        @endif
+                        </div>
                     @endif
                 </div>
             @empty

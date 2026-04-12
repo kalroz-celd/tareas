@@ -99,11 +99,6 @@
                                         {{ $t->project?->name ?? '—' }}
                                     @endif
                                 </div>
-                                @if($t->project_id)
-                                    <div class="text-xs text-slate-500 dark:text-slate-400">
-                                        #{{ $t->project_id }}
-                                    </div>
-                                @endif
                             </td>
 
                             <td class="px-4 py-3">

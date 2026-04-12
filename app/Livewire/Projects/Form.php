@@ -19,6 +19,8 @@ class Form extends Component
     public ?string $due_date = null;
     public bool $is_archived = false;
 
+    private ?string $original_start_date = null;
+
     public function mount(?Project $project = null): void
     {
         $this->project = $project;
@@ -31,17 +33,23 @@ class Form extends Component
             $this->start_date  = optional($project->start_date)->format('Y-m-d');
             $this->due_date    = optional($project->due_date)->format('Y-m-d');
             $this->is_archived = (bool) $project->is_archived;
+            $this->original_start_date = $this->start_date;
         }
     }
 
     public function rules(): array
     {
+        $startDateRules = ['nullable', 'date'];
+        if ($this->start_date && $this->start_date !== $this->original_start_date) {
+            $startDateRules[] = 'after_or_equal:today';
+        }
+
         return [
             'name' => ['required', 'string', 'max:120'],
             'description' => ['nullable', 'string', 'max:5000'],
             'status' => ['required', Rule::in(['planning','active','on_hold','completed','cancelled'])],
             'priority' => ['required', Rule::in(['low','medium','high','urgent'])],
-            'start_date' => ['nullable', 'date'],
+            'start_date' => $startDateRules,
             'due_date' => ['nullable', 'date', 'after_or_equal:start_date'],
             'is_archived' => ['boolean'],
         ];

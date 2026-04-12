@@ -52,27 +52,42 @@ class Index extends Component
         $projectsTimeline['month_breakdown'] = $this->buildMonthBreakdown($projectItems, $this->month);
 
         $projectTaskTimelines = $projects->map(function (Project $project) {
-            $taskItems = $project->tasks
+            $taskItems = $project->tasks()
                     ->whereIn('status', Task::OPEN_STATUSES)
+                    ->orderBy('created_at')
+                    ->get()
                     ->map(function (Task $task) {
-                $start = $task->created_at->copy()->startOfDay();
-                $end = ($task->due_date ?? $task->created_at)->copy()->startOfDay();
+                        $start = $task->created_at->copy()->startOfDay();
+                        $end = ($task->due_date ?? $task->created_at)->copy()->startOfDay();
 
-                    if ($end->lessThan($start)) {
-                        $end = $start->copy();
-                    }
+                        if ($end->lessThan($start)) {
+                            $end = $start->copy();
+                        }
 
-                    return [
-                        'label' => $task->title,
-                        'sub_label' => $task->status_label,
-                        'start' => $start,
-                        'end' => $end,
-                        'range_label' => $start->format('d/m/Y') . ' → ' . $end->format('d/m/Y'),
-                        'bar_style' => $task->status_badge_style,
-                    ];
-                })->all();
+                        return [
+                            'label' => $task->title,
+                            'sub_label' => $task->status_label,
+                            'start' => $start,
+                            'end' => $end,
+                            'range_label' => $start->format('d/m/Y') . ' → ' . $end->format('d/m/Y'),
+                            'bar_style' => $task->status_badge_style,
+                        ];
+                    })->all();
 
             $timeline = $this->buildTimeline($taskItems);
+            $chartConfig = [
+                'items' => collect($taskItems)->map(function ($item) {
+                    return [
+                        'label' => $item['label'],
+                        'start' => $item['start']->timestamp * 1000,
+                        'end' => $item['end']->timestamp * 1000,
+                        'range' => $item['range_label'],
+                        'subLabel' => $item['sub_label'],
+                    ];
+                })->values()->all(),
+                'start' => $timeline['start']?->timestamp ? $timeline['start']->timestamp * 1000 : null,
+                'end' => $timeline['end']?->timestamp ? $timeline['end']->timestamp * 1000 : null,
+            ];
 
             return [
                 'project_id' => $project->id,
@@ -81,6 +96,7 @@ class Index extends Component
                 'timeline' => $timeline,
                 'months' => $this->buildMonthSegments($timeline['start'], $timeline['end']),
                 'month_breakdown' => $this->buildMonthBreakdown($taskItems, $this->month),
+                'chart_config' => $chartConfig,
             ];
         });
 
@@ -115,6 +131,19 @@ class Index extends Component
             ->all();
 
         $allTasksTimeline = $this->buildTimeline($allTasksItems);
+        $allTasksTimeline['chart_config'] = [
+            'items' => collect($allTasksItems)->map(function ($item) {
+                return [
+                    'label' => $item['label'],
+                    'start' => $item['start']->timestamp * 1000,
+                    'end' => $item['end']->timestamp * 1000,
+                    'range' => $item['range_label'],
+                    'subLabel' => $item['sub_label'],
+                ];
+            })->values()->all(),
+            'start' => $allTasksTimeline['start']?->timestamp ? $allTasksTimeline['start']->timestamp * 1000 : null,
+            'end' => $allTasksTimeline['end']?->timestamp ? $allTasksTimeline['end']->timestamp * 1000 : null,
+        ];
         $allTasksTimeline['months'] = $this->buildMonthSegments($allTasksTimeline['start'], $allTasksTimeline['end']);
         $allTasksTimeline['month_breakdown'] = $this->buildMonthBreakdown($allTasksItems, $this->month);
 

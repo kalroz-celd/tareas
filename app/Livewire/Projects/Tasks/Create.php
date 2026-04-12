@@ -29,7 +29,7 @@ class Create extends Component
             'description' => 'nullable|string',
             'status' => 'required|in:todo,doing,done,blocked',
             'priority' => 'required|in:low,medium,high,urgent',
-            'due_date' => 'nullable|date',
+            'due_date' => 'nullable|date|after_or_equal:today',
         ];
     }
 

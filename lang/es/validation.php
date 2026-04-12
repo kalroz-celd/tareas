@@ -167,4 +167,8 @@ return [
         'due_date' => 'fecha de vencimiento',
         'payment_due_date' => 'fecha de vencimiento de pago',
     ],
+
+    'custom' => [
+        'today' => 'hoy',
+    ],
 ];

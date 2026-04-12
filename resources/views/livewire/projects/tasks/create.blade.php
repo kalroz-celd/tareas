@@ -51,6 +51,7 @@
                 <label class="text-xs font-semibold text-slate-600 dark:text-slate-300">Fecha de vencimiento</label>
                 <input type="date" wire:model="due_date"
                        class="mt-1 w-full rounded-xl border-slate-200 bg-white text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white transition-colors duration-300" />
+                @error('due_date') <div class="mt-1 text-xs text-rose-600">{{ $message }}</div> @enderror
             </div>
         </div>
 
